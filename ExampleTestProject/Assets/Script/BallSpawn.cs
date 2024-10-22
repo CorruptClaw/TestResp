@@ -5,8 +5,9 @@ using UnityEngine.InputSystem;
 
 public class BallSpawn : MonoBehaviour
 {
-    
-    public List <GameObject> Targets;
+
+    //public List <GameObject> Targets;
+    public GameObject target;
 
 
 
@@ -29,6 +30,7 @@ public class BallSpawn : MonoBehaviour
     }
     private void SpawnTarget()
     {
+        GameObject a = Instantiate(target) as GameObject;
 
 
 
