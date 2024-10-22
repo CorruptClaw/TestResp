@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class BallSpawn : MonoBehaviour
 {
+
     public GameObject[] Targets;
 
 
@@ -20,6 +21,14 @@ public class BallSpawn : MonoBehaviour
         
     }
 
-    
+    void OnAttack()
+    {
+        SpawnTarget();
+    }
+
+    private void SpawnTarget()
+    {
+        Instantiate(Targets[0], transform.position, Quaternion.identity);
+    }
 
 }
