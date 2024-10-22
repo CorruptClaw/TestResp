@@ -5,8 +5,10 @@ using UnityEngine.InputSystem;
 
 public class BallSpawn : MonoBehaviour
 {
+    
+    public List <GameObject> Targets;
 
-    public GameObject[] Targets;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,7 +27,6 @@ public class BallSpawn : MonoBehaviour
     {
         //SpawnTarget();
     }
-
     private void SpawnTarget()
     {
 
@@ -34,5 +35,14 @@ public class BallSpawn : MonoBehaviour
 
         //Instantiate(Targets[0], transform.position, Quaternion.identity);
     }
+
+    /*
+    void BallRandomizer()
+    {
+        
+        
+    }
+    */
+
 
 }

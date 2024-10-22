@@ -573,6 +573,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90682e09cc599b242a7453f0f5aef292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberToSpawn: 6
+  Spawner: {fileID: 1719900628}
   Targets:
   - {fileID: 1449658004574754260, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
   - {fileID: 1449658004574754260, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
