@@ -23,12 +23,16 @@ public class BallSpawn : MonoBehaviour
 
     void OnAttack()
     {
-        SpawnTarget();
+        //SpawnTarget();
     }
 
     private void SpawnTarget()
     {
-        Instantiate(Targets[0], transform.position, Quaternion.identity);
+
+
+
+
+        //Instantiate(Targets[0], transform.position, Quaternion.identity);
     }
 
 }
