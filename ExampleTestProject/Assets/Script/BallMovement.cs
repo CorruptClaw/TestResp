@@ -7,6 +7,8 @@ public class BallMovement : MonoBehaviour
     
     private Rigidbody2D rb;
 
+    private float stopThreshold = 0.1f;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,18 +29,35 @@ public class BallMovement : MonoBehaviour
 
     }
 
-   /* private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
+            Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+            /*
             rb.bodyType = RigidbodyType2D.Kinematic;
 
+            rb.angularVelocity = 0f;
 
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
+            Vector2 groundPosition = collision.contacts[0].point;
+            transform.position = new Vector2(groundPosition.x, groundPosition.y + (transform.localScale.y / 1.7f));
+            */
 
         }
-    }
+        else if (collision.gameObject.CompareTag("Ball"))
+        {
+            if (rb.linearVelocity.magnitude < stopThreshold)
+            {
+                rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
-    */
+            }
+
+        }
+
+    }
 
 }
