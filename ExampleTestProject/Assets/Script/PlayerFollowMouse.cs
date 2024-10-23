@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TriangleFollowMouse : MonoBehaviour
+public class PlayerFollowMouse : MonoBehaviour
 {
 
 
@@ -21,9 +21,6 @@ public class TriangleFollowMouse : MonoBehaviour
     {
         
     }
-
-
-
 
 
 
