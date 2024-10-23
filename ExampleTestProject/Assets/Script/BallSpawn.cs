@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 public class BallSpawn : MonoBehaviour
 {
 
-    //public List <GameObject> Targets;
-    public GameObject target;
+    public List <GameObject> Targets;
+    //public GameObject target;
 
 
 
@@ -26,16 +26,13 @@ public class BallSpawn : MonoBehaviour
 
     void OnAttack()
     {
-        //SpawnTarget();
+        SpawnTarget();
     }
     private void SpawnTarget()
     {
-        GameObject a = Instantiate(target) as GameObject;
 
+        Instantiate(Targets[0], transform.position, Quaternion.identity);
 
-
-
-        //Instantiate(Targets[0], transform.position, Quaternion.identity);
     }
 
     /*
