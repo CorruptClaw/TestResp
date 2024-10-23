@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 182545041}
   m_Layer: 0
   m_Name: Box
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 182545038}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.020000309, y: -1.78, z: 0}
+  m_LocalPosition: {x: 0, y: -1.78, z: 0}
   m_LocalScale: {x: 26.237, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 1173005021}
   m_Layer: 0
   m_Name: BoxRight
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -374,7 +374,7 @@ Transform:
   m_GameObject: {fileID: 1173005019}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.23211493, y: 4.74, z: 0}
+  m_LocalPosition: {x: 0.272, y: 4.74, z: 0}
   m_LocalScale: {x: 0.038114112, y: 12.862, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -555,7 +555,7 @@ Transform:
   m_GameObject: {fileID: 1719900628}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.66, y: 8.66, z: 0}
+  m_LocalPosition: {x: 0, y: 8.5, z: 0}
   m_LocalScale: {x: 11.97375, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -580,6 +580,8 @@ MonoBehaviour:
   - {fileID: 1449658004574754260, guid: 1e1757b356561c745ac0cb37935e433d, type: 3}
   - {fileID: 1449658004574754260, guid: 260c7a39b9fd69f41a1801afb2e5071c, type: 3}
   - {fileID: 1449658004574754260, guid: 952d55283e563454694dbfb28335e360, type: 3}
+  minX: -5
+  maxX: 5
 --- !u!114 &1719900632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,7 +625,7 @@ GameObject:
   - component: {fileID: 1837425933}
   m_Layer: 0
   m_Name: BoxLeft
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

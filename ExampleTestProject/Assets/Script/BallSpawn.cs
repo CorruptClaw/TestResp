@@ -9,8 +9,10 @@ public class BallSpawn : MonoBehaviour
     public List <GameObject> Targets;
     //public GameObject target;
 
+    public float minX = -5f;
+    public float maxX = 5f;
 
-
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,20 +30,29 @@ public class BallSpawn : MonoBehaviour
     {
         SpawnTarget();
     }
+
     private void SpawnTarget()
     {
+        if (Targets.Count > 0)
+        {
+            int randomIndex = Random.Range(0, Targets.Count);
+            
+            float randomX = Random.Range(minX, maxX);
 
-        Instantiate(Targets[0], transform.position, Quaternion.identity);
+            float dynamicYPosition = transform.position.y;
+
+            Vector2 randomSpawnPosition = new Vector2(randomX, dynamicYPosition);
+
+
+            Instantiate(Targets[randomIndex], randomSpawnPosition, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log("No ball obj assaigned to the list");
+        }
 
     }
 
-    /*
-    void BallRandomizer()
-    {
-        
-        
-    }
-    */
 
 
 }

@@ -27,4 +27,18 @@ public class BallMovement : MonoBehaviour
 
     }
 
+   /* private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+
+
+
+
+        }
+    }
+
+    */
+
 }
