@@ -33,7 +33,7 @@ public class BallMovement : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
-            Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
+            //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
             /*
