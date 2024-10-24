@@ -43,7 +43,7 @@ public class PlayerShootScript : MonoBehaviour
     
     void onAttack()
     {
-        Debug.Log("Player is shooting!");
+        //Debug.Log("Player is shooting!");
 
         ShootingRandomBalls();
 
@@ -56,8 +56,16 @@ public class PlayerShootScript : MonoBehaviour
         {
             int randomIndex = Random.Range(0, ballPrefabs.Count);
 
-            Instantiate(ballPrefabs[randomIndex], transform.position, Quaternion.identity);
-            
+            Vector3 spawnPosition = shootingPoint != null ? shootingPoint.position : transform.position;
+
+            GameObject ballInstance = Instantiate(ballPrefabs[randomIndex], spawnPosition, Quaternion.identity);
+
+            Rigidbody2D rb = ballInstance.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.AddForce(shootingPoint.up * shootingForce);
+            }
+
         }
         else
         {

@@ -5,19 +5,32 @@ using UnityEngine;
 public class BallMovement : MonoBehaviour
 {
     
-    //private Rigidbody2D rb;
+    private Rigidbody2D rb;
 
-    //private float stopThreshold = 0.1f;
+    private float stopThreshold = 0.1f;
+
+    public bool kinematicOn;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        /*
-        rb = GetComponent<Rigidbody2D>();
         
-        float rotationDir = Random.Range(-1f, 1f);
-        rb.AddTorque(rotationDir * 10);
-        */
+        rb = GetComponent<Rigidbody2D>();
+
+        if (kinematicOn == false)
+        {
+
+            float rotationDir = Random.Range(-1f, 1f);
+            rb.AddTorque(rotationDir * 10);
+
+        }
+        else
+        {
+
+            rb.bodyType = RigidbodyType2D.Kinematic;
+
+        }
+        
 
     }
 
@@ -34,7 +47,7 @@ public class BallMovement : MonoBehaviour
         if(collision.gameObject.CompareTag("Ground"))
         {
             //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
             /*
             rb.bodyType = RigidbodyType2D.Kinematic;
@@ -50,16 +63,20 @@ public class BallMovement : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Ball"))
         {
-
+            Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
             //rb.constraints = RigidbodyConstraints2D.FreezeAll;
-
-            /*
-            if (rb.linearVelocity.magnitude < stopThreshold)
+            if (kinematicOn == false)
             {
-                rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                if (rb.linearVelocity.magnitude < stopThreshold)
+                {
+                    rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
+                }
             }
-            */
+            else
+            {
+                return;
+            }
 
         }
 
