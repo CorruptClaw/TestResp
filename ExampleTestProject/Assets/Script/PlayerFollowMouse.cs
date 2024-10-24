@@ -46,7 +46,7 @@ public class PlayerFollowMouse : MonoBehaviour
 
         Vector3 startPoint = transform.position;
 
-        Vector3 pointDir = transform.up * frontLineLenght;
+        Vector3 pointDir = transform.right * frontLineLenght;
 
         Gizmos.DrawLine(startPoint, startPoint + pointDir);
 
