@@ -32,6 +32,9 @@ public class BallSpawn : MonoBehaviour
 
     private void SpawnTarget()
     {
+
+        GameObject spawnedObject = null;
+
         if (spawnPlenty == true)
         {
 
@@ -39,7 +42,7 @@ public class BallSpawn : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, Targets.Count);
 
-                Instantiate(Targets[randomIndex], transform.position, Quaternion.identity);
+                spawnedObject = Instantiate(Targets[randomIndex], transform.position, Quaternion.identity);
             }
             else
             {
@@ -51,24 +54,32 @@ public class BallSpawn : MonoBehaviour
         {
             if (Blue == true)
             {
-                Instantiate(Targets[0], transform.position, Quaternion.identity);
+                spawnedObject = Instantiate(Targets[0], transform.position, Quaternion.identity);
             }
             else if (Yellow == true && Blue == false)
             {
-                Instantiate(Targets[5], transform.position, Quaternion.identity);
+                spawnedObject = Instantiate(Targets[5], transform.position, Quaternion.identity);
             }
             
         }
-        else
+
+        if (spawnedObject != null)
         {
-            return;
+
+            Rigidbody2D rb = spawnedObject.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+
+                rb.bodyType = RigidbodyType2D.Kinematic;
+
+            }
+            else
+            {
+                Debug.Log("No Rigidbody2D component found on the spawned object");
+            }
+
         }
 
     }
 
-    private void TargetObjRef()
-    {
-        
-    }
-    
 }
