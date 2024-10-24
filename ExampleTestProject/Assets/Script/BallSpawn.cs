@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BallSpawn : MonoBehaviour
 {
@@ -9,8 +8,6 @@ public class BallSpawn : MonoBehaviour
     public List <GameObject> Targets;
     //public GameObject target;
 
-    public float minX = -5f;
-    public float maxX = 5f;
 
     
 
@@ -26,27 +23,13 @@ public class BallSpawn : MonoBehaviour
         
     }
 
-    /*
-
-    void OnAttack()
-    {
-        SpawnTarget();
-    }
-
     private void SpawnTarget()
     {
         if (Targets.Count > 0)
         {
             int randomIndex = Random.Range(0, Targets.Count);
-            
-            float randomX = Random.Range(minX, maxX);
 
-            float dynamicYPosition = transform.position.y;
-
-            Vector2 randomSpawnPosition = new Vector2(randomX, dynamicYPosition);
-
-
-            Instantiate(Targets[randomIndex], randomSpawnPosition, Quaternion.identity);
+            Instantiate(Targets[randomIndex], transform.position, Quaternion.identity);
         }
         else
         {
@@ -54,7 +37,7 @@ public class BallSpawn : MonoBehaviour
         }
 
     }
-    */
+    
 
 
 }
