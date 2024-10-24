@@ -2,14 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerShootScript : MonoBehaviour
 {
-    public GameObject[] ballPrefabs;
+    public List <GameObject> ballPrefabs;
 
     public float shootingForce = 500f;
 
     public Transform shootingPoint;
+
+    private PlayerInput playerInput;
+
+
+    private void Awake()
+    {
+        
+        playerInput = GetComponent<PlayerInput>();
+
+        playerInput.actions["Attack"].performed += ctx => onAttack();
+
+
+    }
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,9 +40,10 @@ public class PlayerShootScript : MonoBehaviour
 
     }
 
-    /*
+    
     void onAttack()
     {
+        Debug.Log("Player is shooting!");
 
         ShootingRandomBalls();
 
@@ -37,23 +52,18 @@ public class PlayerShootScript : MonoBehaviour
     void ShootingRandomBalls()
     {
 
-        if (ballPrefabs.Length == 0)
+        if (ballPrefabs.Count > 0)
         {
-            Debug.Log("No Ball prefabs assigned!");
+            int randomIndex = Random.Range(0, ballPrefabs.Count);
 
+            Instantiate(ballPrefabs[randomIndex], transform.position, Quaternion.identity);
+            
         }
-
-        int randomIndex = Random.Range(0, ballPrefabs.Length);
-        GameObject selectedBall = ballPrefabs[randomIndex];
-
-        GameObject ballInstance = Instantiate(selectedBall, shootingPoint.position, shootingPoint.rotation);
-
-        Rigidbody2D ballRB = ballInstance.GetComponent<Rigidbody2D>();
-        if (ballRB != null)
+        else
         {
-            ballRB.AddForce(shootingPoint.right *  shootingForce);
+            Debug.Log("No ball obj assaigned to the list");
         }
 
     }
-    */
+    
 }

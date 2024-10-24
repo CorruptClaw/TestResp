@@ -5,18 +5,19 @@ using UnityEngine;
 public class BallMovement : MonoBehaviour
 {
     
-    private Rigidbody2D rb;
+    //private Rigidbody2D rb;
 
-    private float stopThreshold = 0.1f;
+    //private float stopThreshold = 0.1f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        /*
         rb = GetComponent<Rigidbody2D>();
-
+        
         float rotationDir = Random.Range(-1f, 1f);
         rb.AddTorque(rotationDir * 10);
-
+        */
 
     }
 
@@ -33,7 +34,7 @@ public class BallMovement : MonoBehaviour
         if(collision.gameObject.CompareTag("Ground"))
         {
             //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
             /*
             rb.bodyType = RigidbodyType2D.Kinematic;
@@ -49,11 +50,16 @@ public class BallMovement : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Ball"))
         {
+
+            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+            /*
             if (rb.linearVelocity.magnitude < stopThreshold)
             {
                 rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
             }
+            */
 
         }
 
