@@ -250,8 +250,8 @@ MonoBehaviour:
   - {fileID: 1449658004574754260, guid: 952d55283e563454694dbfb28335e360, type: 3}
   spawnPlenty: 0
   spawnSingle: 1
-  Blue: 1
-  Yellow: 0
+  Blue: 0
+  Yellow: 1
 --- !u!58 &1334353599
 CircleCollider2D:
   m_ObjectHideFlags: 0
