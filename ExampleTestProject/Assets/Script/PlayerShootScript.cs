@@ -81,6 +81,11 @@ public class PlayerShootScript : MonoBehaviour
             previewBallInstance = Instantiate(ballPrefabs[randomIndex], shootingPoint.position, Quaternion.identity);
 
             previewBallInstance.tag = "PlayerBall";
+            BallBehavior ballBehavior = previewBallInstance.GetComponent<BallBehavior>();
+            if (ballBehavior != null)
+            {
+                ballBehavior.isPlayerBall = true;
+            }
 
             Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
             if (rb != null)

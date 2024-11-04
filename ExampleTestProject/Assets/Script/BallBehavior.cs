@@ -5,7 +5,7 @@ using UnityEngine;
 public class BallBehavior : MonoBehaviour
 {
     public string ballColor;
-    public bool isPlayerBall = false;
+    public bool isPlayerBall;
     private Rigidbody2D rb;
 
 
@@ -13,8 +13,8 @@ public class BallBehavior : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0;
-        Debug.Log($"Ball initialized with color: {ballColor}, isPlayerBall: {isPlayerBall}");
+        //rb.gravityScale = 0;
+        //Debug.Log($"Ball initialized with color: {ballColor}, isPlayerBall: {isPlayerBall}");
     }
 
     // Update is called once per frame
@@ -25,17 +25,31 @@ public class BallBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log($"Collision detected with: {collision.gameObject.name}");
+        if (!CompareTag("Ball")) return;
+
+        //Debug.Log($"Collision detected with: {collision.gameObject.name}");
+        if (collision.gameObject.CompareTag("PlayerBall"))
+        {
+            isPlayerBall = true;
+        }
         BallBehavior otherbBall = collision.gameObject.GetComponent<BallBehavior>();
         if (otherbBall != null && otherbBall.isPlayerBall && otherbBall.ballColor == this.ballColor)
         {
+            Debug.Log($"Player ball with matching color detected: {otherbBall.ballColor}");
             List<GameObject> connectedBalls = GetConnectedBallsOfSameColor();
             Debug.Log($"Connected balls found: {connectedBalls.Count}");
             if (connectedBalls.Count >= 3)
             {
-                MakeBallsFall(connectedBalls);
-                Destroy(otherbBall.gameObject);
-                Debug.Log($"Destroy player ball: {otherbBall.gameObject.name}");
+                //MakeBallsFall(connectedBalls);
+                MakeBallsTriggers(connectedBalls);
+
+                CircleCollider2D playerCollider = otherbBall.GetComponent<CircleCollider2D>();
+                if (playerCollider != null)
+                {
+                    playerCollider.isTrigger = true;
+                }
+
+                Debug.Log($"Set player ball and connected balls to triggers: {otherbBall.gameObject.name}");
             }
 
         }
@@ -76,6 +90,36 @@ public class BallBehavior : MonoBehaviour
 
     }
 
+    private void MakeBallsTriggers(List<GameObject> connectedBalls)
+    {
+        foreach (var ball in connectedBalls)
+        {
+            CircleCollider2D collider = ball.GetComponent<CircleCollider2D>();
+            if (collider != null)
+            {
+                collider.isTrigger = true;
+                Debug.Log($"Set ball to trigger: {ball.name}");
+
+            }
+
+            Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.constraints = RigidbodyConstraints2D.None;
+                rb.gravityScale = 1f;
+                Debug.Log($"Unfreezing ball: {ball.name}");
+
+            }
+
+        }
+
+    }
+
+
+
+
+
+    /*
     private void MakeBallsFall(List<GameObject> connectedBalls)
     {
         foreach (var ball in connectedBalls)
@@ -84,7 +128,7 @@ public class BallBehavior : MonoBehaviour
             if (ballBehavior != null)
             {
                 ballBehavior.EnableGravity();
-                //Debug.Log($"Enabled gravity for ball: {ball.name}");
+                Debug.Log($"Enabled gravity for ball: {ball.name}");
             }
 
         }
@@ -96,7 +140,7 @@ public class BallBehavior : MonoBehaviour
         rb.gravityScale = 1f;
         //Debug.Log($"Gravity enabled for ball: {gameObject.name}");
     }
-
+    */
 
 
 }

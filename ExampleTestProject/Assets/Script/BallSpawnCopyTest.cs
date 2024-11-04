@@ -57,7 +57,9 @@ public class BallSpawnCopyTest : MonoBehaviour
             Vector2 randomSpawnPosition = new Vector2(randomX, dynamicYPosition);
 
 
-            Instantiate(Targets[randomIndex], randomSpawnPosition, Quaternion.identity);
+            GameObject spawnedBall = Instantiate(Targets[randomIndex], randomSpawnPosition, Quaternion.identity);
+            spawnedBall.tag = "Ball";
+
         }
         else
         {
