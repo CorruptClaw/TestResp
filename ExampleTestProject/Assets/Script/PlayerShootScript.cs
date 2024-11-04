@@ -14,6 +14,8 @@ public class PlayerShootScript : MonoBehaviour
 
     private PlayerInput playerInput;
 
+    private GameObject previewBallInstance = null;
+
 
     private void Awake()
     {
@@ -30,28 +32,95 @@ public class PlayerShootScript : MonoBehaviour
     void Start()
     {
 
+        GeneratePreviewBall();
         
-
     }
+
 
     // Update is called once per frame
     void Update()
     {
+
+        if (previewBallInstance != null)
+        {
+            previewBallInstance.transform.position = shootingPoint.position;
+        }
 
     }
 
     
     void onAttack()
     {
+
+        if (previewBallInstance != null)
+        {
+            Debug.Log("Player is shooting!");
+
+            ShootBall();
+
+            GeneratePreviewBall();
+        }
         //Debug.Log("Player is shooting!");
 
-        ShootingRandomBalls();
+        //ShootingRandomBalls();
 
     }
 
-    void ShootingRandomBalls()
+
+    void GeneratePreviewBall()
+    {
+        if (ballPrefabs.Count > 0)
+        {
+            int randomIndex = Random.Range(0, ballPrefabs.Count);
+
+            if (previewBallInstance != null)
+            {
+                Destroy(previewBallInstance);
+            }
+
+            previewBallInstance = Instantiate(ballPrefabs[randomIndex], shootingPoint.position, Quaternion.identity);
+
+            previewBallInstance.tag = "PlayerBall";
+
+            Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+
+            }
+
+        }
+        else
+        {
+            Debug.Log("No ball obj assaigned to the list");
+        }
+
+        
+
+
+    }
+
+
+    void ShootBall()
     {
 
+        if (previewBallInstance != null)
+        {
+            Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+                rb.AddForce(shootingPoint.up * shootingForce);
+            }
+            previewBallInstance= null;
+
+        }
+
+
+
+        /*
         if (ballPrefabs.Count > 0)
         {
             int randomIndex = Random.Range(0, ballPrefabs.Count);
@@ -71,7 +140,7 @@ public class PlayerShootScript : MonoBehaviour
         {
             Debug.Log("No ball obj assaigned to the list");
         }
-
+        */
     }
     
 }

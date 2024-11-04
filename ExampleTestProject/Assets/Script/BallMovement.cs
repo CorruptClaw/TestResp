@@ -61,7 +61,7 @@ public class BallMovement : MonoBehaviour
             */
 
         }
-        else if (collision.gameObject.CompareTag("Ball"))
+        else if (collision.gameObject.CompareTag("Ball") || collision.gameObject.CompareTag("PlayerBall"))
         {
             //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
             //rb.constraints = RigidbodyConstraints2D.FreezeAll;
