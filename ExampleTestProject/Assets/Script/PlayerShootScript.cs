@@ -19,11 +19,9 @@ public class PlayerShootScript : MonoBehaviour
 
     private void Awake()
     {
-        
         playerInput = GetComponent<PlayerInput>();
 
         playerInput.actions["Attack"].performed += ctx => onAttack();
-
 
     }
 
@@ -31,7 +29,6 @@ public class PlayerShootScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
         GeneratePreviewBall();
         
     }
@@ -40,7 +37,6 @@ public class PlayerShootScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (previewBallInstance != null)
         {
             previewBallInstance.transform.position = shootingPoint.position;
@@ -51,19 +47,15 @@ public class PlayerShootScript : MonoBehaviour
     
     void onAttack()
     {
-
         if (previewBallInstance != null)
         {
-            Debug.Log("Player is shooting!");
+            //Debug.Log("Player is shooting!");
 
             ShootBall();
 
             GeneratePreviewBall();
         }
-        //Debug.Log("Player is shooting!");
-
-        //ShootingRandomBalls();
-
+        
     }
 
 
@@ -76,11 +68,12 @@ public class PlayerShootScript : MonoBehaviour
             if (previewBallInstance != null)
             {
                 Destroy(previewBallInstance);
+
             }
 
             previewBallInstance = Instantiate(ballPrefabs[randomIndex], shootingPoint.position, Quaternion.identity);
-
             previewBallInstance.tag = "PlayerBall";
+
             BallBehavior ballBehavior = previewBallInstance.GetComponent<BallBehavior>();
             if (ballBehavior != null)
             {
@@ -92,6 +85,7 @@ public class PlayerShootScript : MonoBehaviour
             {
                 rb.linearVelocity = Vector2.zero;
                 rb.angularVelocity = 0f;
+                rb.interpolation = RigidbodyInterpolation2D.Interpolate;
 
             }
 
@@ -101,15 +95,10 @@ public class PlayerShootScript : MonoBehaviour
             Debug.Log("No ball obj assaigned to the list");
         }
 
-        
-
-
     }
-
 
     void ShootBall()
     {
-
         if (previewBallInstance != null)
         {
             Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
@@ -123,29 +112,6 @@ public class PlayerShootScript : MonoBehaviour
 
         }
 
-
-
-        /*
-        if (ballPrefabs.Count > 0)
-        {
-            int randomIndex = Random.Range(0, ballPrefabs.Count);
-
-            Vector3 spawnPosition = shootingPoint != null ? shootingPoint.position : transform.position;
-
-            GameObject ballInstance = Instantiate(ballPrefabs[randomIndex], spawnPosition, Quaternion.identity);
-
-            Rigidbody2D rb = ballInstance.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.AddForce(shootingPoint.up * shootingForce);
-            }
-
-        }
-        else
-        {
-            Debug.Log("No ball obj assaigned to the list");
-        }
-        */
     }
     
 }

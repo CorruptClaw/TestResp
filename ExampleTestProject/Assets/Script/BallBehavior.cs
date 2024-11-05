@@ -7,12 +7,17 @@ public class BallBehavior : MonoBehaviour
     public string ballColor;
     public bool isPlayerBall;
     private Rigidbody2D rb;
+    public LayerMask groundLayer;
+    public float supportCheckFrequency = 1.0f;
+    private float nextTimeCheck;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        nextTimeCheck = Time.time + supportCheckFrequency;
 
         //Debug.Log($"Ball initialized with color: {ballColor}, isPlayerBall: {isPlayerBall}");
     }
@@ -20,7 +25,13 @@ public class BallBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Time.time >= nextTimeCheck)
+        {
+            CheckAndHandleSupport();
+            nextTimeCheck = Time.time + supportCheckFrequency;
+
+        }
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -35,11 +46,9 @@ public class BallBehavior : MonoBehaviour
 
         BallBehavior otherbBall = collision.gameObject.GetComponent<BallBehavior>();
 
-        
-
         if (otherbBall != null && otherbBall.isPlayerBall && otherbBall.ballColor == this.ballColor)
         {
-            Debug.Log($"Player ball with matching color detected: {otherbBall.ballColor}");
+            //Debug.Log($"Player ball with matching color detected: {otherbBall.ballColor}");
 
             List<GameObject> connectedBalls = GetConnectedBallsOfSameColor();
 
@@ -53,7 +62,7 @@ public class BallBehavior : MonoBehaviour
                 CircleCollider2D playerCollider = otherbBall.GetComponent<CircleCollider2D>();
                 if (playerCollider != null)
                 {
-                    playerCollider.isTrigger = true;
+                    StartCoroutine(MakePlayerBallTriggerWithDelay(playerCollider));
                 }
 
                 Debug.Log($"Set player ball and connected balls to triggers: {otherbBall.gameObject.name}");
@@ -109,7 +118,7 @@ public class BallBehavior : MonoBehaviour
             {
                 collider.isTrigger = true;
 
-                Debug.Log($"Set ball to trigger: {ball.name}");
+                //Debug.Log($"Set ball to trigger: {ball.name}");
 
             }
 
@@ -120,11 +129,50 @@ public class BallBehavior : MonoBehaviour
                 rb.gravityScale = 1f;
                 rb.constraints = RigidbodyConstraints2D.None;
 
-                Debug.Log($"Unfreezing ball: {ball.name}");
+                //Debug.Log($"Unfreezing ball: {ball.name}");
 
             }
 
         }
+
+    }
+
+    private IEnumerator MakePlayerBallTriggerWithDelay(CircleCollider2D playerCollider)
+    {
+        yield return new WaitForFixedUpdate();
+        playerCollider.isTrigger = true;
+
+    }
+
+    private void CheckAndHandleSupport()
+    {
+        List<GameObject> connectedBalls = GetConnectedBallsOfSameColor();
+        bool isSupported = IsClusterSupported(connectedBalls);
+
+        if (!isSupported)
+        {
+            MakeBallsTriggers(connectedBalls);
+        }
+
+    }
+
+    private bool IsClusterSupported(List<GameObject> connectedBalls)
+    {
+        foreach (var ball in connectedBalls)
+        {
+            if (IsBallSupported(ball))
+            {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+
+    private bool IsBallSupported(GameObject ball)
+    {
+        return Physics2D.Raycast(ball.transform.position, Vector2.down, 0.5f, groundLayer);
 
     }
 

@@ -19,19 +19,16 @@ public class BallMovement : MonoBehaviour
 
         if (kinematicOn == false)
         {
-
             float rotationDir = Random.Range(-1f, 1f);
             rb.AddTorque(rotationDir * 10);
 
         }
         else
         {
-
             rb.bodyType = RigidbodyType2D.Kinematic;
 
         }
         
-
     }
 
     // Update is called once per frame
@@ -49,22 +46,10 @@ public class BallMovement : MonoBehaviour
             //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
-            /*
-            rb.bodyType = RigidbodyType2D.Kinematic;
-
-            rb.angularVelocity = 0f;
-
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-
-            Vector2 groundPosition = collision.contacts[0].point;
-            transform.position = new Vector2(groundPosition.x, groundPosition.y + (transform.localScale.y / 1.7f));
-            */
-
         }
         else if (collision.gameObject.CompareTag("Ball") || collision.gameObject.CompareTag("PlayerBall"))
         {
             //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
             if (kinematicOn == false)
             {
                 if (rb.linearVelocity.magnitude < stopThreshold)
@@ -72,6 +57,7 @@ public class BallMovement : MonoBehaviour
                     rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
                 }
+
             }
             else
             {
