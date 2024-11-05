@@ -12,6 +12,10 @@ public class BallSpawn : MonoBehaviour
 
     public bool spawnSingle;
     public bool Blue;
+    public bool Green;
+    public bool Orange;
+    public bool Red;
+    public bool White;
     public bool Yellow;
 
 
@@ -19,8 +23,6 @@ public class BallSpawn : MonoBehaviour
     void Start()
     {
         SpawnTarget();
-
-        
 
     }
 
@@ -32,12 +34,10 @@ public class BallSpawn : MonoBehaviour
 
     private void SpawnTarget()
     {
-
         GameObject spawnedObject = null;
 
-        if (spawnPlenty == true)
+        if (spawnPlenty)
         {
-
             if (Targets.Count > 0)
             {
                 int randomIndex = Random.Range(0, Targets.Count);
@@ -50,22 +50,53 @@ public class BallSpawn : MonoBehaviour
             }
 
         }
-        else if (spawnSingle == true && spawnPlenty == false)
+        else if (spawnSingle)
         {
-            if (Blue == true)
+            List<string> selectedColors = new List<string>();
+            if (Blue) selectedColors.Add("Blue");
+            if (Green) selectedColors.Add("Green");
+            if (Orange) selectedColors.Add("Orange");
+            if (Red) selectedColors.Add("Red");
+            if (White) selectedColors.Add("White");
+            if (Yellow) selectedColors.Add("Yellow");
+
+            if (selectedColors.Count > 1)
             {
-                spawnedObject = Instantiate(Targets[0], transform.position, Quaternion.identity);
+                Debug.Log("Multiple colors selected. Please select only one color when spawnSingle is true.");
+                return;
             }
-            else if (Yellow == true && Blue == false)
+            else if (selectedColors.Count == 1)
             {
-                spawnedObject = Instantiate(Targets[5], transform.position, Quaternion.identity);
+                int colorIndex = selectedColors[0] switch
+                {
+                    "Blue" => 0,
+                    "Green" => 1,
+                    "Orange" => 2,
+                    "Red" => 3,
+                    "White" => 4,
+                    "Yellow" => 5,
+                    _ => -1
+                };
+
+                if (colorIndex != -1 && colorIndex < Targets.Count)
+                {
+                    spawnedObject = Instantiate(Targets[colorIndex], transform.position, Quaternion.identity);
+                }
+                else
+                {
+                    Debug.Log("Selected color index out of range or color not assigned in Targets list.");
+                }
+
             }
-            
+            else
+            {
+                Debug.Log("No color selected. Please select a color to spawn a single ball.");
+            }
+
         }
 
         if (spawnedObject != null)
         {
-
             Rigidbody2D rb = spawnedObject.GetComponent<Rigidbody2D>();
             if (rb != null)
             {

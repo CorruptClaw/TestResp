@@ -13,7 +13,7 @@ public class BallBehavior : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //rb.gravityScale = 0;
+
         //Debug.Log($"Ball initialized with color: {ballColor}, isPlayerBall: {isPlayerBall}");
     }
 
@@ -25,19 +25,26 @@ public class BallBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!CompareTag("Ball")) return;
+        if (!CompareTag("Ball") && !CompareTag("PlayerBall")) return;
 
         //Debug.Log($"Collision detected with: {collision.gameObject.name}");
         if (collision.gameObject.CompareTag("PlayerBall"))
         {
             isPlayerBall = true;
         }
+
         BallBehavior otherbBall = collision.gameObject.GetComponent<BallBehavior>();
+
+        
+
         if (otherbBall != null && otherbBall.isPlayerBall && otherbBall.ballColor == this.ballColor)
         {
             Debug.Log($"Player ball with matching color detected: {otherbBall.ballColor}");
+
             List<GameObject> connectedBalls = GetConnectedBallsOfSameColor();
+
             Debug.Log($"Connected balls found: {connectedBalls.Count}");
+
             if (connectedBalls.Count >= 3)
             {
                 //MakeBallsFall(connectedBalls);
@@ -69,16 +76,19 @@ public class BallBehavior : MonoBehaviour
         {
             GameObject currentBall = queue.Dequeue();
             connectedBalls.Add(currentBall);
+
             Debug.Log($"Checking ball: {currentBall.name}");
 
             Collider2D[] neighbors = Physics2D.OverlapCircleAll(currentBall.transform.position, 1f);
             foreach (var neighbor in neighbors)
             {
                 BallBehavior neighborBall = neighbor.GetComponent<BallBehavior>();
+
                 if (neighborBall != null && neighborBall.ballColor == this.ballColor && !visited.Contains(neighbor.gameObject))
                 {
                     queue.Enqueue(neighbor.gameObject);
                     visited.Add(neighbor.gameObject);
+
                     Debug.Log($"Found connected ball: {neighborBall.gameObject.name}");
 
                 }
@@ -98,6 +108,7 @@ public class BallBehavior : MonoBehaviour
             if (collider != null)
             {
                 collider.isTrigger = true;
+
                 Debug.Log($"Set ball to trigger: {ball.name}");
 
             }
@@ -105,8 +116,10 @@ public class BallBehavior : MonoBehaviour
             Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.constraints = RigidbodyConstraints2D.None;
+                rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.gravityScale = 1f;
+                rb.constraints = RigidbodyConstraints2D.None;
+
                 Debug.Log($"Unfreezing ball: {ball.name}");
 
             }
@@ -114,33 +127,5 @@ public class BallBehavior : MonoBehaviour
         }
 
     }
-
-
-
-
-
-    /*
-    private void MakeBallsFall(List<GameObject> connectedBalls)
-    {
-        foreach (var ball in connectedBalls)
-        {
-            BallBehavior ballBehavior = ball.GetComponent<BallBehavior>();
-            if (ballBehavior != null)
-            {
-                ballBehavior.EnableGravity();
-                Debug.Log($"Enabled gravity for ball: {ball.name}");
-            }
-
-        }
-
-    }
-
-    public void EnableGravity()
-    {
-        rb.gravityScale = 1f;
-        //Debug.Log($"Gravity enabled for ball: {gameObject.name}");
-    }
-    */
-
 
 }

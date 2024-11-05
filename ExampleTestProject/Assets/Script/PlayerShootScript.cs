@@ -8,7 +8,7 @@ public class PlayerShootScript : MonoBehaviour
 {
     public List <GameObject> ballPrefabs;
 
-    public float shootingForce = 500f;
+    public float shootingForce;
 
     public Transform shootingPoint;
 
