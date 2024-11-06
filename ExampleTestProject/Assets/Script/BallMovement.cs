@@ -8,13 +8,15 @@ public class BallMovement : MonoBehaviour
     private CircleCollider2D circleCollider;
     private float stopThreshold = 0.1f;
     public bool kinematicOn;
+    public LayerMask groundLayer;
     public bool isGrounded = false;
+    public bool isOnBall = false;
     public bool isConnected = false;
 
-    private float nextTimeCheck;
-    private float supportCheckFrequency = 1.0f; // Adjust the frequency as needed
+    //private float nextTimeCheck;
+    //private float supportCheckFrequency = 1.0f; // Adjust the frequency as needed
 
-    [SerializeField] private float timeRemaining;
+    //[SerializeField] private float timeRemaining;
 
     void Start()
     {
@@ -31,18 +33,16 @@ public class BallMovement : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
-        nextTimeCheck = Time.time + supportCheckFrequency;
+        //nextTimeCheck = Time.time + supportCheckFrequency;
         //Debug.Log($"Ball {gameObject.name} initialized with kinematicOn: {kinematicOn}");
     }
 
     void Update()
     {
-        timeRemaining = nextTimeCheck - Time.time;
         
-        if (isGrounded && Time.time >= nextTimeCheck)
+        if (isGrounded)
         {
             CheckAndHandleSupport();
-            nextTimeCheck = Time.time + supportCheckFrequency;
             //Debug.Log("Checking support for floating balls");
         }
         
@@ -65,6 +65,7 @@ public class BallMovement : MonoBehaviour
 
                 //Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
             }
+            isOnBall = true;
             isConnected = true;
         }
     }
@@ -79,12 +80,13 @@ public class BallMovement : MonoBehaviour
 
             if (!isSupported)
             {
-                Debug.Log($"{gameObject.name} cluster unsupported. Making cluster fall. Cluster size: {connectedBalls.Count}");
+                //Debug.Log($"{gameObject.name} cluster unsupported. Making cluster fall. Cluster size: {connectedBalls.Count}");
                 MakeClusterFall(connectedBalls);
                 isGrounded = false;
+                isOnBall = false;
                 isConnected = false;
 
-                Debug.Log($"{gameObject.name} after falling: isConnected: {isConnected}, isGrounded: {isGrounded}");
+                //Debug.Log($"{gameObject.name} after falling: isConnected: {isConnected}, isGrounded: {isGrounded}");
             }
         }
     }
@@ -110,7 +112,7 @@ public class BallMovement : MonoBehaviour
         {
             if (neighbor.CompareTag("Ground"))
             {
-                //Debug.Log($"Ball {ball.name} is supported by ground");
+                Debug.Log($"Ball {ball.name} is supported by ground");
                 return true;
             }
             else if (neighbor.CompareTag("Ball"))
@@ -118,7 +120,7 @@ public class BallMovement : MonoBehaviour
                 BallBehavior neighborBehavior = neighbor.GetComponent<BallBehavior>();
                 if (neighborBehavior != null && neighborBehavior.isPlayerBall)
                 {
-                    //Debug.Log($"Ball {ball.name} is supported by player ball: {neighbor.name}");
+                    Debug.Log($"Ball {ball.name} is supported by player ball: {neighbor.name}");
                     return true;
                 }
             }
@@ -135,8 +137,9 @@ public class BallMovement : MonoBehaviour
             {
                 ballMovement.MakeDynamicAndFall();
                 ballMovement.isGrounded = false;
+                ballMovement.isOnBall = false;
                 ballMovement.isConnected = false;
-                Debug.Log($"{ball.name} is set to fall. isConnected: {ballMovement.isConnected}, isGrounded: {ballMovement.isGrounded}");
+                //Debug.Log($"{ball.name} is set to fall. isConnected: {ballMovement.isConnected}, isGrounded: {ballMovement.isGrounded}");
             }
 
         }
@@ -150,7 +153,8 @@ public class BallMovement : MonoBehaviour
         circleCollider.isTrigger = true;
         rb.gravityScale = 1f;
 
-        Debug.Log($"Ball {gameObject.name} set to dynamic and falling");
+        //Debug.Log($"Ball {gameObject.name} set to dynamic and falling");
     }
+    
 
 }

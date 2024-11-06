@@ -2,57 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallBehavior : MonoBehaviour
+public class BallBehaviorTest : MonoBehaviour
 {
     public string ballColor;
     public bool isPlayerBall;
     private Rigidbody2D rb;
-
-    private BallMovement ballMovement;
+    public LayerMask groundLayer;
+    public float supportCheckFrequency = 1.0f; // How often to check support in seconds
+    private float nextCheckTime;
+    public bool isGrounded = false; // Track if the ball has initially collided with the ground or other grounded balls
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        ballMovement = GetComponent<BallMovement>();
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        nextCheckTime = Time.time + supportCheckFrequency;
+    }
 
-        //Debug.Log($"Ball initialized with color: {ballColor}, isPlayerBall: {isPlayerBall}");
+    void Update()
+    {
+        // Only start support checks if the ball is grounded (initially settled on the ground)
+        if (isGrounded && Time.time >= nextCheckTime)
+        {
+            CheckAndHandleSupport();
+            nextCheckTime = Time.time + supportCheckFrequency;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!CompareTag("Ball") && !CompareTag("PlayerBall")) return;
 
-        //Debug.Log($"Collision detected with: {collision.gameObject.name}");
+        // If the ball collides with the ground or other grounded balls, mark it as grounded
+        if (collision.gameObject.CompareTag("Ground") || (collision.gameObject.CompareTag("Ball") && collision.gameObject.GetComponent<BallBehaviorTest>().isGrounded))
+        {
+            isGrounded = true;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll; // Freeze the ball after initial grounding
+        }
 
+        // If it collides with a player ball with the same color, perform color-matching logic
         if (collision.gameObject.CompareTag("PlayerBall"))
         {
             isPlayerBall = true;
         }
 
-        BallBehavior otherBall = collision.gameObject.GetComponent<BallBehavior>();
+        BallBehaviorTest otherBall = collision.gameObject.GetComponent<BallBehaviorTest>();
+
         if (otherBall != null && otherBall.isPlayerBall && otherBall.ballColor == this.ballColor)
         {
-            //Debug.Log($"Player ball with matching color detected: {otherBall.ballColor}");
-
             List<GameObject> connectedBalls = GetConnectedBallsOfSameColor();
-            //Debug.Log($"Connected balls found: {connectedBalls.Count}");
-
             if (connectedBalls.Count >= 3)
             {
                 MakeBallsTriggers(connectedBalls);
-                CircleCollider2D playerCollider = otherBall.GetComponent<CircleCollider2D>();
-                if (playerCollider != null)
-                {
-                    StartCoroutine(MakePlayerBallTriggerWithDelay(playerCollider));
-                }
-
-                //Debug.Log($"Set player ball and connected balls to triggers: {otherBall.gameObject.name}");
+                StartCoroutine(MakePlayerBallTriggerWithDelay(otherBall.GetComponent<CircleCollider2D>()));
             }
         }
     }
 
-    public List<GameObject> GetConnectedBallsOfSameColor()
+    private List<GameObject> GetConnectedBallsOfSameColor()
     {
         List<GameObject> connectedBalls = new List<GameObject>();
         Queue<GameObject> queue = new Queue<GameObject>();
@@ -66,19 +73,14 @@ public class BallBehavior : MonoBehaviour
             GameObject currentBall = queue.Dequeue();
             connectedBalls.Add(currentBall);
 
-            //Debug.Log($"Checking ball: {currentBall.name}");
-
             Collider2D[] neighbors = Physics2D.OverlapCircleAll(currentBall.transform.position, 1f);
             foreach (var neighbor in neighbors)
             {
-                BallBehavior neighborBall = neighbor.GetComponent<BallBehavior>();
-
+                BallBehaviorTest neighborBall = neighbor.GetComponent<BallBehaviorTest>();
                 if (neighborBall != null && neighborBall.ballColor == this.ballColor && !visited.Contains(neighbor.gameObject))
                 {
                     queue.Enqueue(neighbor.gameObject);
                     visited.Add(neighbor.gameObject);
-
-                    //Debug.Log($"Found connected ball: {neighborBall.gameObject.name}");
                 }
             }
         }
@@ -93,7 +95,6 @@ public class BallBehavior : MonoBehaviour
             if (collider != null)
             {
                 collider.isTrigger = true;
-                //Debug.Log($"Set ball to trigger: {ball.name}");
             }
 
             Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
@@ -102,8 +103,6 @@ public class BallBehavior : MonoBehaviour
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.gravityScale = 1f;
                 rb.constraints = RigidbodyConstraints2D.None;
-
-                //Debug.Log($"Unfreezing ball: {ball.name}");
             }
         }
     }
@@ -114,4 +113,33 @@ public class BallBehavior : MonoBehaviour
         playerCollider.isTrigger = true;
     }
 
+    private void CheckAndHandleSupport()
+    {
+        List<GameObject> connectedBalls = GetConnectedBallsOfSameColor();
+        bool isSupported = IsClusterSupported(connectedBalls);
+
+        if (!isSupported)
+        {
+            MakeBallsTriggers(connectedBalls); // Make unsupported balls fall
+        }
+    }
+
+    private bool IsClusterSupported(List<GameObject> connectedBalls)
+    {
+        foreach (var ball in connectedBalls)
+        {
+            if (IsBallSupported(ball))
+            {
+                return true; // If any ball in the cluster is supported, the cluster is supported
+            }
+        }
+        return false;
+    }
+
+    private bool IsBallSupported(GameObject ball)
+    {
+        // Check if the ball is supported by the ground (below it)
+        return Physics2D.Raycast(ball.transform.position, Vector2.down, 0.5f, groundLayer);
+    }
 }
+
