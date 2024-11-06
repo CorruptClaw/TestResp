@@ -86,7 +86,6 @@ public class BallMovement : MonoBehaviour
             if (IsBallSupported(ball))
             {
                 //Debug.Log($"Cluster is supported by {ball.name}");
-                isConnected = true;
                 return true;
             }
         }
@@ -121,16 +120,19 @@ public class BallMovement : MonoBehaviour
     {
         foreach (var ball in connectedBalls)
         {
-            if (isGrounded == false || isConnected == false)
+            CircleCollider2D collider = ball.GetComponent<CircleCollider2D>();
+            if (collider != null)
             {
-                CircleCollider2D collider = ball.GetComponent<CircleCollider2D>();
-                if (collider != null)
+                if (isGrounded == false || isConnected == false)
                 {
                     collider.isTrigger = true;
                 }
+            }
 
-                Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-                if (rb != null)
+            Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                if (isGrounded == false || isConnected == false)
                 {
                     rb.constraints = RigidbodyConstraints2D.None;
                     rb.gravityScale = 1f;
@@ -139,6 +141,7 @@ public class BallMovement : MonoBehaviour
             }
             
         }
+
     }
 
 }
