@@ -40,7 +40,7 @@ public class BallMovement : MonoBehaviour
         timeRemaining = nextTimeCheck - Time.time;
         
 
-        if (isGrounded && Time.time >= nextTimeCheck || isConnected && Time.time >= nextTimeCheck || isGrounded && isConnected && Time.time >= nextTimeCheck)
+        if (isGrounded && Time.time >= nextTimeCheck)
         {
             CheckAndHandleSupport();
             nextTimeCheck = Time.time + supportCheckFrequency;
