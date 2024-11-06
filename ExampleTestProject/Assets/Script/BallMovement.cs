@@ -39,7 +39,6 @@ public class BallMovement : MonoBehaviour
     {
         timeRemaining = nextTimeCheck - Time.time;
         
-
         if (isGrounded && Time.time >= nextTimeCheck)
         {
             CheckAndHandleSupport();
