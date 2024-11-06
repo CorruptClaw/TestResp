@@ -79,7 +79,7 @@ public class PlayerShootScript : MonoBehaviour
             {
                 ballBehavior.isPlayerBall = true;
             }
-
+            
             Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
             if (rb != null)
             {

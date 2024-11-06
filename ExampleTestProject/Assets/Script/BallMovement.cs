@@ -4,68 +4,141 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    
     private Rigidbody2D rb;
-
     private float stopThreshold = 0.1f;
-
     public bool kinematicOn;
+    public bool isGrounded = false;
+    public bool isConnected = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float nextTimeCheck;
+    private float supportCheckFrequency = 1.0f; // Adjust the frequency as needed
+
     void Start()
     {
-        
         rb = GetComponent<Rigidbody2D>();
 
-        if (kinematicOn == false)
+        if (!kinematicOn)
         {
             float rotationDir = Random.Range(-1f, 1f);
             rb.AddTorque(rotationDir * 10);
-
         }
         else
         {
             rb.bodyType = RigidbodyType2D.Kinematic;
-
         }
-        
+
+        nextTimeCheck = Time.time + supportCheckFrequency;
+        //Debug.Log($"Ball {gameObject.name} initialized with kinematicOn: {kinematicOn}");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
-
-
+        if (isGrounded && Time.time >= nextTimeCheck)
+        {
+            CheckAndHandleSupport();
+            nextTimeCheck = Time.time + supportCheckFrequency;
+            //Debug.Log("Checking support for floating balls");
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
+            isGrounded = true;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
-
+            //Debug.Log($"{gameObject.name} grounded on {collision.gameObject.name}");
         }
         else if (collision.gameObject.CompareTag("Ball") || collision.gameObject.CompareTag("PlayerBall"))
         {
-            //Debug.Log(gameObject.name + " touching " + collision.gameObject.name);
-            if (kinematicOn == false)
+            if (!kinematicOn && rb.linearVelocity.magnitude < stopThreshold)
             {
-                if (rb.linearVelocity.magnitude < stopThreshold)
-                {
-                    rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                
+                //Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
+            }
+            isConnected = true;
+        }
+    }
 
+    private void CheckAndHandleSupport()
+    {
+        BallBehavior behavior = GetComponent<BallBehavior>();
+        if (behavior != null)
+        {
+            List<GameObject> connectedBalls = behavior.GetConnectedBallsOfSameColor();
+            bool isSupported = IsClusterSupported(connectedBalls);
+
+            if (!isSupported)
+            {
+                MakeClusterFall(connectedBalls);
+                isGrounded = false;
+                isConnected = false;
+                //Debug.Log($"Making unsupported cluster fall. Cluster size: {connectedBalls.Count}");
+            }
+        }
+    }
+
+    private bool IsClusterSupported(List<GameObject> connectedBalls)
+    {
+        foreach (var ball in connectedBalls)
+        {
+            if (IsBallSupported(ball))
+            {
+                //Debug.Log($"Cluster is supported by {ball.name}");
+                isConnected = true;
+                return true;
+            }
+        }
+        //Debug.Log("Cluster is unsupported");
+        return false;
+    }
+
+    private bool IsBallSupported(GameObject ball)
+    {
+        Collider2D[] neighbors = Physics2D.OverlapCircleAll(ball.transform.position, 1f);
+        foreach (var neighbor in neighbors)
+        {
+            if (neighbor.CompareTag("Ground"))
+            {
+                //Debug.Log($"Ball {ball.name} is supported by ground");
+                return true;
+            }
+            else if (neighbor.CompareTag("Ball"))
+            {
+                BallBehavior neighborBehavior = neighbor.GetComponent<BallBehavior>();
+                if (neighborBehavior != null && neighborBehavior.isPlayerBall)
+                {
+                    //Debug.Log($"Ball {ball.name} is supported by player ball: {neighbor.name}");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void MakeClusterFall(List<GameObject> connectedBalls)
+    {
+        foreach (var ball in connectedBalls)
+        {
+            if (isGrounded == false || isConnected == false)
+            {
+                CircleCollider2D collider = ball.GetComponent<CircleCollider2D>();
+                if (collider != null)
+                {
+                    collider.isTrigger = true;
                 }
 
+                Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.constraints = RigidbodyConstraints2D.None;
+                    rb.gravityScale = 1f;
+                    //Debug.Log($"Unfreezing and making ball {ball.name} fall");
+                }
             }
-            else
-            {
-                return;
-            }
-
+            
         }
-
     }
 
 }
