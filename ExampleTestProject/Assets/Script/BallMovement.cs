@@ -46,6 +46,7 @@ public class BallMovement : MonoBehaviour
             nextTimeCheck = Time.time + supportCheckFrequency;
             //Debug.Log("Checking support for floating balls");
         }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -62,7 +63,7 @@ public class BallMovement : MonoBehaviour
             if (!kinematicOn && rb.linearVelocity.magnitude < stopThreshold)
             {
                 rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                
+
                 //Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
             }
             isConnected = true;
