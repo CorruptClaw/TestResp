@@ -5,6 +5,7 @@ using UnityEngine;
 public class BallMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private CircleCollider2D circleCollider;
     private float stopThreshold = 0.1f;
     public bool kinematicOn;
     public bool isGrounded = false;
@@ -13,9 +14,12 @@ public class BallMovement : MonoBehaviour
     private float nextTimeCheck;
     private float supportCheckFrequency = 1.0f; // Adjust the frequency as needed
 
+    [SerializeField] private float timeRemaining;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        circleCollider = GetComponent<CircleCollider2D>();
 
         if (!kinematicOn)
         {
@@ -33,7 +37,10 @@ public class BallMovement : MonoBehaviour
 
     void Update()
     {
-        if (isGrounded && Time.time >= nextTimeCheck)
+        timeRemaining = nextTimeCheck - Time.time;
+        
+
+        if (isGrounded && Time.time >= nextTimeCheck || isConnected && Time.time >= nextTimeCheck || isGrounded && isConnected && Time.time >= nextTimeCheck)
         {
             CheckAndHandleSupport();
             nextTimeCheck = Time.time + supportCheckFrequency;
@@ -46,6 +53,7 @@ public class BallMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+            isConnected = true;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             //Debug.Log($"{gameObject.name} grounded on {collision.gameObject.name}");
         }
@@ -71,10 +79,12 @@ public class BallMovement : MonoBehaviour
 
             if (!isSupported)
             {
+                Debug.Log($"{gameObject.name} cluster unsupported. Making cluster fall. Cluster size: {connectedBalls.Count}");
                 MakeClusterFall(connectedBalls);
                 isGrounded = false;
                 isConnected = false;
-                //Debug.Log($"Making unsupported cluster fall. Cluster size: {connectedBalls.Count}");
+
+                Debug.Log($"{gameObject.name} after falling: isConnected: {isConnected}, isGrounded: {isGrounded}");
             }
         }
     }
@@ -120,28 +130,27 @@ public class BallMovement : MonoBehaviour
     {
         foreach (var ball in connectedBalls)
         {
-            CircleCollider2D collider = ball.GetComponent<CircleCollider2D>();
-            if (collider != null)
+            BallMovement ballMovement = ball.GetComponent<BallMovement>();
+            if (ballMovement != null)
             {
-                if (isGrounded == false || isConnected == false)
-                {
-                    collider.isTrigger = true;
-                }
+                ballMovement.MakeDynamicAndFall();
+                ballMovement.isGrounded = false;
+                ballMovement.isConnected = false;
+                Debug.Log($"{ball.name} is set to fall. isConnected: {ballMovement.isConnected}, isGrounded: {ballMovement.isGrounded}");
             }
 
-            Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                if (isGrounded == false || isConnected == false)
-                {
-                    rb.constraints = RigidbodyConstraints2D.None;
-                    rb.gravityScale = 1f;
-                    //Debug.Log($"Unfreezing and making ball {ball.name} fall");
-                }
-            }
-            
         }
 
+    }
+
+    public void MakeDynamicAndFall()
+    {
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        circleCollider.isTrigger = true;
+        rb.gravityScale = 1f;
+
+        Debug.Log($"Ball {gameObject.name} set to dynamic and falling");
     }
 
 }
