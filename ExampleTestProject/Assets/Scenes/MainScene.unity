@@ -333,17 +333,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -6683211281724108160, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
-      propertyPath: groundLayer.m_Bits
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1449658004574754260, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
       propertyPath: m_Name
       value: Ball_G
-      objectReference: {fileID: 0}
-    - target: {fileID: 1449658004574754260, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
-      propertyPath: m_Layer
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
       propertyPath: m_LocalPosition.x
@@ -351,7 +343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.9171591
+      value: 4.06
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
       propertyPath: m_LocalPosition.z
@@ -760,6 +752,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4173807816122766413, guid: 8d8affe329c1a5547aa2dbcc23a4e40f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 418.30624
+      objectReference: {fileID: 0}
     - target: {fileID: 4173807816122766413, guid: 8d8affe329c1a5547aa2dbcc23a4e40f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.14
