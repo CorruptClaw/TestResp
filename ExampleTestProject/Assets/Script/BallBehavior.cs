@@ -97,11 +97,16 @@ public class BallBehavior : MonoBehaviour
             }
 
             Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
+            BallMovement isOn = ball.GetComponent<BallMovement>();
             if (rb != null)
             {
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.gravityScale = 1f;
                 rb.constraints = RigidbodyConstraints2D.None;
+
+                isOn.isConnected = false;
+                isOn.isGrounded = false;
+                isOn.isOnBall = false;
 
                 //Debug.Log($"Unfreezing ball: {ball.name}");
             }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class BallMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private CircleCollider2D circleCollider;
     private float stopThreshold = 0.1f;
     public bool kinematicOn;
     public LayerMask groundLayer;
@@ -14,13 +13,11 @@ public class BallMovement : MonoBehaviour
     public bool isConnected = false;
 
     public float frontLineLength = 1f;
-    private float supportCheckFrequency = 1.0f; // Frequency of support checks in seconds
-    private float nextTimeCheck;
+    private bool hasSupportLogged = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        circleCollider = GetComponent<CircleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground", "Ball");
 
         if (!kinematicOn)
@@ -32,38 +29,32 @@ public class BallMovement : MonoBehaviour
         {
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
-
-        nextTimeCheck = Time.time + supportCheckFrequency;
     }
 
     void Update()
     {
         // Periodically check for support
-        if (isGrounded || isOnBall)
+        if (!isGrounded || !isOnBall)
         {
-            if (Time.time >= nextTimeCheck)
-            {
-                CheckAndHandleSupport();
-                nextTimeCheck = Time.time + supportCheckFrequency;
-            }
+            CheckAndHandleSupport();
         }
     }
-
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
             isConnected = true;
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            Debug.Log($"{gameObject.name} grounded on {collision.gameObject.name}");
+            //Debug.Log($"{gameObject.name} grounded on {collision.gameObject.name}");
         }
         else if (collision.gameObject.CompareTag("Ball") || collision.gameObject.CompareTag("PlayerBall"))
         {
             if (!kinematicOn && rb.linearVelocity.magnitude < stopThreshold)
             {
-                rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
+                isOnBall = true;
+                isConnected = true;
+                //Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
             }
             isOnBall = true;
             isConnected = true;
@@ -72,47 +63,59 @@ public class BallMovement : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ball") || collision.gameObject.CompareTag("PlayerBall"))
+        if (!collision.gameObject.CompareTag("Ball") || !collision.gameObject.CompareTag("PlayerBall"))
         {
-            Debug.Log($"{gameObject.name} no longer colliding with {collision.gameObject.name}");
+            //Debug.Log($"{gameObject.name} no longer colliding with {collision.gameObject.name}");
             isOnBall = false;
             isConnected = false;
         }
     }
-
+    
     private void CheckAndHandleSupport()
     {
         // Perform a raycast downwards to check for support below
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, frontLineLength, groundLayer);
+        RaycastHit2D hitDown = Physics2D.Raycast(new Vector2(transform.position.x - 0.2f, transform.position.y), Vector2.down, frontLineLength, groundLayer);
+        RaycastHit2D hitDown2 = Physics2D.Raycast(new Vector2(transform.position.x + 0.2f, transform.position.y), Vector2.down, frontLineLength, groundLayer);
 
+        RaycastHit2D hitUp = Physics2D.Raycast(new Vector2(transform.position.x - 0.2f, transform.position.y), Vector2.up, frontLineLength, groundLayer);
+        RaycastHit2D hitUp2 = Physics2D.Raycast(new Vector2(transform.position.x + 0.2f, transform.position.y), Vector2.up, frontLineLength, groundLayer);
+
+        bool hasSupportBelow = hitDown.collider != null || hitDown2.collider != null;
+        bool hasSupportAbove = hitUp.collider != null || hitUp2.collider != null;
+        BallMovement isOn = gameObject.GetComponent<BallMovement>();
+
+        if (hasSupportBelow && !hasSupportLogged && isGrounded && (!CompareTag("PlayerBall")))
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            Debug.Log($"{gameObject.name} has support from below.");
+            hasSupportLogged = true;
+        }
+        else if(!hasSupportBelow && (!CompareTag("PlayerBall")))
+        {
+            //Debug.Log($"{gameObject.name} has no support below. Enabling trigger and making it fall.");
+            hasSupportLogged = false;
+        }
+
+        /*
+        if (!isOn.isGrounded && !isOn.isOnBall && !isOn.isConnected)
+        {
+            Debug.Log($"{gameObject.name} has no support. Enabling trigger and making it fall.");
+        }
+        */
+        /*
         // If there's no collider below, make this ball fall
-        if (hit.collider == null)
+        if (hit.collider == null || hit.collider.gameObject.layer != LayerMask.NameToLayer("Ball"))
         {
             Debug.Log($"{gameObject.name} has no support below. Enabling trigger and making it fall.");
-            MakeDynamicAndFall();
+            //MakeDynamicAndFall();
         }
-        else if (hit.collider.CompareTag("Ball"))
-        {
-            // Check if the supporting ball has its trigger enabled (indicating it's falling)
-            BallMovement supportingBall = hit.collider.GetComponent<BallMovement>();
-            if (supportingBall != null && supportingBall.circleCollider.isTrigger)
-            {
-                Debug.Log($"{gameObject.name} is no longer supported by {hit.collider.gameObject.name} (trigger enabled). Falling.");
-
-                // Set isOnBall and isConnected to false, then trigger falling
-                isOnBall = false;
-                isConnected = false;
-                MakeDynamicAndFall();
-            }
-        }
+        */
     }
 
     public void MakeDynamicAndFall()
     {
-        Debug.Log($"{gameObject.name} isTrigger status before falling: {circleCollider.isTrigger}");
         rb.constraints = RigidbodyConstraints2D.None;
         rb.bodyType = RigidbodyType2D.Dynamic;
-        circleCollider.isTrigger = true;
         rb.gravityScale = 1f;
         Debug.Log($"Ball {gameObject.name} set to dynamic and falling.");
     }
@@ -120,9 +123,24 @@ public class BallMovement : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Vector3 startPoint = transform.position;
+        Vector3 startPoint = new Vector2(transform.position.x - 0.2f, transform.position.y);
         Vector3 pointDir = Vector2.down * frontLineLength;
         Gizmos.DrawLine(startPoint, startPoint + pointDir);
+
+        Gizmos.color = Color.red;
+        Vector3 startPoint2 = new Vector2(transform.position.x + 0.2f, transform.position.y);
+        Vector3 pointDir2 = Vector2.down * frontLineLength;
+        Gizmos.DrawLine(startPoint2, startPoint2 + pointDir2);
+
+        Gizmos.color = Color.magenta;
+        Vector3 startPoint3 = new Vector2(transform.position.x - 0.2f, transform.position.y);
+        Vector3 pointDir3 = Vector2.up * frontLineLength;
+        Gizmos.DrawLine(startPoint3, startPoint3 + pointDir3);
+
+        Gizmos.color = Color.magenta;
+        Vector3 startPoint4 = new Vector2(transform.position.x + 0.2f, transform.position.y);
+        Vector3 pointDir4 = Vector2.up * frontLineLength;
+        Gizmos.DrawLine(startPoint4, startPoint4 + pointDir4);
     }
 
 }

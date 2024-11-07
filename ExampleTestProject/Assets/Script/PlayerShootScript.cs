@@ -7,13 +7,14 @@ using static UnityEngine.GraphicsBuffer;
 public class PlayerShootScript : MonoBehaviour
 {
     public List <GameObject> ballPrefabs;
+    public bool blueBallOnly;
+    public GameObject BlueBall;
+
 
     public float shootingForce;
-
     public Transform shootingPoint;
 
     private PlayerInput playerInput;
-
     private GameObject previewBallInstance = null;
 
 
@@ -63,15 +64,25 @@ public class PlayerShootScript : MonoBehaviour
     {
         if (ballPrefabs.Count > 0)
         {
-            int randomIndex = Random.Range(0, ballPrefabs.Count);
-
             if (previewBallInstance != null)
             {
                 Destroy(previewBallInstance);
 
             }
 
-            previewBallInstance = Instantiate(ballPrefabs[randomIndex], shootingPoint.position, Quaternion.identity);
+            GameObject ballToShoot;
+            if (blueBallOnly && BlueBall != null)
+            {
+                ballToShoot = BlueBall;
+            }
+            else
+            {
+                int randomIndex = Random.Range(0, ballPrefabs.Count);
+                ballToShoot = ballPrefabs[randomIndex];
+
+            }
+
+            previewBallInstance = Instantiate(ballToShoot, shootingPoint.position, Quaternion.identity);
             previewBallInstance.tag = "PlayerBall";
 
             BallBehavior ballBehavior = previewBallInstance.GetComponent<BallBehavior>();
