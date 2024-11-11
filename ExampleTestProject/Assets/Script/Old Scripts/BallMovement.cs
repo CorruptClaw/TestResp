@@ -102,11 +102,11 @@ public class BallMovement : MonoBehaviour
 
             if (hasSupportAbove && isGrounded && isOnBall && isConnected)
             {
-                Debug.Log($"{gameObject.name} has support from {(hitAboveLeft.collider != null ? hitAboveLeft.collider.gameObject.name : hitAboveRight.collider.gameObject.name)} above.");
+                //Debug.Log($"{gameObject.name} has support from {(hitAboveLeft.collider != null ? hitAboveLeft.collider.gameObject.name : hitAboveRight.collider.gameObject.name)} above.");
             }
             else
             {
-                Debug.Log($"{gameObject.name} is grounded on the surface.");
+                //Debug.Log($"{gameObject.name} is grounded on the surface.");
             }
 
             hasSupportLogged = true;
@@ -114,12 +114,12 @@ public class BallMovement : MonoBehaviour
         else if (hasSupportBelow2 && !hasSupportLogged && isOnBall && isConnected && !CompareTag("PlayerBall"))
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            //Debug.Log($"{gameObject.name} has support from below");
+            Debug.Log($"{gameObject.name} has support from below");
             hasSupportLogged = true;
         }
-        else if (!hasSupportBelow && !CompareTag("PlayerBall"))
+        else
         {
-            //Debug.Log($"{gameObject.name} has no support below. Enabling trigger and making it fall.");
+            Debug.Log($"{gameObject.name} has no support below. Enabling trigger and making it fall.");
             hasSupportLogged = false;
         }
 
