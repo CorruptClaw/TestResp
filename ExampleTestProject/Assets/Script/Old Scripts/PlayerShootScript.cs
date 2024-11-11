@@ -16,10 +16,9 @@ public class PlayerShootScript : MonoBehaviour
 
     private PlayerInput playerInput;
     private GameObject previewBallInstance = null;
-    private BallMovementTest movementTest;
 
 
-    private void Awake()
+    private void Awake() // This method is called when the script instance is being loaded.
     {
         playerInput = GetComponent<PlayerInput>();
 
@@ -32,8 +31,6 @@ public class PlayerShootScript : MonoBehaviour
     void Start()
     {
         GeneratePreviewBall();
-
-        movementTest = GetComponent<BallMovementTest>();
 
     }
 
@@ -49,7 +46,7 @@ public class PlayerShootScript : MonoBehaviour
     }
 
     
-    void onAttack()
+    void onAttack() // Called when the "Attack" action is triggered.
     {
         if (previewBallInstance != null)
         {
@@ -60,11 +57,10 @@ public class PlayerShootScript : MonoBehaviour
             GeneratePreviewBall();
 
         }
-        movementTest.isShot = true;
     }
 
 
-    void GeneratePreviewBall()
+    void GeneratePreviewBall() // Generates and displays a preview ball at the shooting point
     {
         if (ballPrefabs.Count > 0)
         {
@@ -112,15 +108,22 @@ public class PlayerShootScript : MonoBehaviour
 
     }
 
-    void ShootBall()
+    void ShootBall() // Fires the preview ball by applying a force and making it a "live" ball in the game
     {
         if (previewBallInstance != null)
         {
+            PlayerBall playerBall = previewBallInstance.GetComponent<PlayerBall>();
+            if (playerBall != null)
+            {
+                playerBall.isShot = true;
+            }
+
             Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
                 rb.angularVelocity = 0f;
+                playerBall.circleCollider.enabled = true;
                 rb.AddForce(shootingPoint.up * shootingForce);
             }
             previewBallInstance= null;

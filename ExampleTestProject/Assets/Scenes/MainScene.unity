@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &436350350
+--- !u!1001 &375547328
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -127,17 +127,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: position.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: position.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: kinematicOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1449658004574754260, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_Name
-      value: Ball_B (1)
+      value: Ball_B (2)
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.24
+      value: -1.284
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.21999979
+      value: -0.22
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -325,6 +337,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &874662825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 874662826}
+  - component: {fileID: 874662827}
+  m_Layer: 0
+  m_Name: TheBallManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &874662826
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874662825}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 16.09, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &874662827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874662825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e4242de5b46fb4dbd2247704d174a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allBalls: []
 --- !u!1001 &1070741749
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -336,10 +393,6 @@ PrefabInstance:
     - target: {fileID: 1449658004574754260, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
       propertyPath: m_Name
       value: Ball_G
-      objectReference: {fileID: 0}
-    - target: {fileID: 1449658004574754260, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 0620af527d0c1b946abdcee4f66e2722, type: 3}
       propertyPath: m_LocalPosition.x
@@ -394,13 +447,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: position.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: position.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: kinematicOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1449658004574754260, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_Name
       value: Ball_B
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.4197602
+      value: -3.42
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -474,7 +539,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1923913794
+--- !u!1001 &2075831375
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -482,17 +547,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: position.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: position.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3639373642570957625, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
+      propertyPath: kinematicOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1449658004574754260, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_Name
-      value: Ball_B (2)
+      value: Ball_B (1)
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.11
+      value: -2.3
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.21999979
+      value: -0.22
       objectReference: {fileID: 0}
     - target: {fileID: 6076061261200057997, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -655,14 +732,14 @@ PrefabInstance:
     - target: {fileID: 6335839692282004211, guid: cf62327fd6aa40649ab5a7a90633471d, type: 3}
       propertyPath: BlueBall
       value: 
-      objectReference: {fileID: 1449658004574754260, guid: 8607d5e539823bf44b999c406ae0ebc0, type: 3}
-    - target: {fileID: 6335839692282004211, guid: cf62327fd6aa40649ab5a7a90633471d, type: 3}
-      propertyPath: blueBallOnly
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1449658004574754260, guid: 9270b666a2bc28b4fad49ef17a1fa38a, type: 3}
     - target: {fileID: 8282093093938851973, guid: cf62327fd6aa40649ab5a7a90633471d, type: 3}
       propertyPath: m_Name
       value: PlayerHolder
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282093093938851973, guid: cf62327fd6aa40649ab5a7a90633471d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -860,7 +937,8 @@ SceneRoots:
   - {fileID: 3966172233586620697}
   - {fileID: 503892412}
   - {fileID: 1125378779}
-  - {fileID: 436350350}
-  - {fileID: 1923913794}
+  - {fileID: 2075831375}
+  - {fileID: 375547328}
   - {fileID: 1070741749}
   - {fileID: 1225976426}
+  - {fileID: 874662826}

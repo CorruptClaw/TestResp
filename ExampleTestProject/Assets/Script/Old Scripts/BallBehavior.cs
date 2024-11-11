@@ -8,27 +8,20 @@ public class BallBehavior : MonoBehaviour
     public bool isPlayerBall;
     private Rigidbody2D rb;
 
-    private BallMovement ballMovement;
-
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        ballMovement = GetComponent<BallMovement>();
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
 
         //Debug.Log($"Ball initialized with color: {ballColor}, isPlayerBall: {isPlayerBall}");
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision) // Triggered when this ball collides with another object
     {
         if (!CompareTag("Ball") && !CompareTag("PlayerBall")) return;
 
         //Debug.Log($"Collision detected with: {collision.gameObject.name}");
-
-        if (collision.gameObject.CompareTag("PlayerBall"))
-        {
-            isPlayerBall = true;
-        }
 
         BallBehavior otherBall = collision.gameObject.GetComponent<BallBehavior>();
         if (otherBall != null && otherBall.isPlayerBall && otherBall.ballColor == this.ballColor)
@@ -52,7 +45,7 @@ public class BallBehavior : MonoBehaviour
         }
     }
 
-    public List<GameObject> GetConnectedBallsOfSameColor()
+    public List<GameObject> GetConnectedBallsOfSameColor() // Uses a breadth-first search to find all neighboring balls of the same color within a radius of 1 unit from the ball’s position.
     {
         List<GameObject> connectedBalls = new List<GameObject>();
         Queue<GameObject> queue = new Queue<GameObject>();
@@ -85,35 +78,42 @@ public class BallBehavior : MonoBehaviour
         return connectedBalls;
     }
 
-    private void MakeBallsTriggers(List<GameObject> connectedBalls)
+    private void MakeBallsTriggers(List<GameObject> connectedBalls) // Converts all connected balls to triggers, making them intangible to other objects and adjusts their physics properties.
     {
         foreach (var ball in connectedBalls)
         {
             CircleCollider2D collider = ball.GetComponent<CircleCollider2D>();
+            //BallMovementTest isOn = ball.GetComponent<BallMovementTest>();
             if (collider != null)
             {
                 collider.isTrigger = true;
+                
+                //isOn.isConnected = false;
+                //isOn.isGrounded = false;
+                //isOn.isOnBall = false;
+
                 //Debug.Log($"Set ball to trigger: {ball.name}");
             }
 
             Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-            BallMovement isOn = ball.GetComponent<BallMovement>();
+            //BallMovementTest isOn = ball.GetComponent<BallMovementTest>();
             if (rb != null)
             {
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.gravityScale = 1f;
                 rb.constraints = RigidbodyConstraints2D.None;
-                /*
-                isOn.isConnected = false;
-                isOn.isGrounded = false;
-                isOn.isOnBall = false;
-                */
+
+
+                //isOn.isConnected = false;
+                //isOn.isGrounded = false;
+                //isOn.isOnBall = false;
+
                 //Debug.Log($"Unfreezing ball: {ball.name}");
             }
         }
     }
 
-    private IEnumerator MakePlayerBallTriggerWithDelay(CircleCollider2D playerCollider)
+    private IEnumerator MakePlayerBallTriggerWithDelay(CircleCollider2D playerCollider) // Coroutine that waits one physics update (fixed update) before setting the player ball's collider as a trigger.
     {
         yield return new WaitForFixedUpdate();
         playerCollider.isTrigger = true;
