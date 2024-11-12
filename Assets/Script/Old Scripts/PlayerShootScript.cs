@@ -15,8 +15,10 @@ public class PlayerShootScript : MonoBehaviour
 
     private PlayerInput playerInput;
     private GameObject previewBallInstance = null;
+    private BallBehavior ballBehavior;
     private PlayerBall playerBall;
 
+    
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -36,11 +38,11 @@ public class PlayerShootScript : MonoBehaviour
             Debug.LogError("Attack action not found in PlayerInput actions.");
         }
     }
-
+    
     void Start()
     {
         GeneratePreviewBall();
-        playerBall = GetComponent<PlayerBall>();
+        ballBehavior = GetComponent<BallBehavior>();
     }
 
     void Update()
@@ -50,7 +52,7 @@ public class PlayerShootScript : MonoBehaviour
             previewBallInstance.transform.position = shootingPoint.position;
         }
     }
-
+    
     void onAttack()
     {
         if (previewBallInstance != null && playerInput != null)
@@ -60,7 +62,7 @@ public class PlayerShootScript : MonoBehaviour
             playerBall.isShot = true;
         }
     }
-
+    
     void GeneratePreviewBall()
     {
         if (ballPrefabs.Count > 0)
@@ -104,6 +106,7 @@ public class PlayerShootScript : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
                 rb.angularVelocity = 0f;
                 rb.AddForce(shootingPoint.up * shootingForce);
+                
             }
             previewBallInstance = null;
         }

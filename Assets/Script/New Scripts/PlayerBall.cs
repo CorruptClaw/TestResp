@@ -55,19 +55,4 @@ public class PlayerBall : MonoBehaviour
         }
     }
 
-
-    /*
-    private void CheckAndHandleSupport()
-    {
-
-    }
-    
-    public void MakeDynamicAndFall()
-    {
-        rb.constraints = RigidbodyConstraints2D.None;
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.gravityScale = 1f;
-        Debug.Log($"Ball {gameObject.name} set to dynamic and falling.");
-    }
-    */
 }
