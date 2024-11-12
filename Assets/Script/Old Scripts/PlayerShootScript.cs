@@ -6,10 +6,9 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PlayerShootScript : MonoBehaviour
 {
-    public List <GameObject> ballPrefabs;
+    public List<GameObject> ballPrefabs;
     public bool blueBallOnly;
     public GameObject BlueBall;
-
 
     public float shootingForce;
     public Transform shootingPoint;
@@ -18,51 +17,49 @@ public class PlayerShootScript : MonoBehaviour
     private GameObject previewBallInstance = null;
     private PlayerBall playerBall;
 
-
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        if (playerInput == null)
+        {
+            Debug.LogError("PlayerInput component is missing on this GameObject.");
+            return;
+        }
 
-        playerInput.actions["Attack"].performed += ctx => onAttack();
-
+        var attackAction = playerInput.actions["Attack"];
+        if (attackAction != null)
+        {
+            attackAction.performed += ctx => onAttack();
+        }
+        else
+        {
+            Debug.LogError("Attack action not found in PlayerInput actions.");
+        }
     }
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         GeneratePreviewBall();
-
         playerBall = GetComponent<PlayerBall>();
-
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if (previewBallInstance != null)
         {
             previewBallInstance.transform.position = shootingPoint.position;
         }
-
     }
 
-    
     void onAttack()
     {
-        if (previewBallInstance != null)
+        if (previewBallInstance != null && playerInput != null)
         {
-            //Debug.Log("Player is shooting!");
-
             ShootBall();
-
             GeneratePreviewBall();
-
+            playerBall.isShot = true;
         }
-        playerBall.isShot = true;
     }
-
 
     void GeneratePreviewBall()
     {
@@ -71,21 +68,9 @@ public class PlayerShootScript : MonoBehaviour
             if (previewBallInstance != null)
             {
                 Destroy(previewBallInstance);
-
             }
 
-            GameObject ballToShoot;
-            if (blueBallOnly && BlueBall != null)
-            {
-                ballToShoot = BlueBall;
-            }
-            else
-            {
-                int randomIndex = Random.Range(0, ballPrefabs.Count);
-                ballToShoot = ballPrefabs[randomIndex];
-
-            }
-
+            GameObject ballToShoot = blueBallOnly && BlueBall != null ? BlueBall : ballPrefabs[Random.Range(0, ballPrefabs.Count)];
             previewBallInstance = Instantiate(ballToShoot, shootingPoint.position, Quaternion.identity);
             previewBallInstance.tag = "PlayerBall";
 
@@ -94,22 +79,19 @@ public class PlayerShootScript : MonoBehaviour
             {
                 ballBehavior.isPlayerBall = true;
             }
-            
+
             Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
                 rb.angularVelocity = 0f;
                 rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-
             }
-
         }
         else
         {
-            Debug.Log("No ball obj assaigned to the list");
+            Debug.Log("No ball obj assigned to the list");
         }
-
     }
 
     void ShootBall()
@@ -123,10 +105,8 @@ public class PlayerShootScript : MonoBehaviour
                 rb.angularVelocity = 0f;
                 rb.AddForce(shootingPoint.up * shootingForce);
             }
-            previewBallInstance= null;
-
+            previewBallInstance = null;
         }
-
     }
-    
 }
+
