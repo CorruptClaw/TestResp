@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4008382629512561205}
   - component: {fileID: 8439177201234870003}
+  - component: {fileID: 4697055961526544641}
   m_Layer: 0
   m_Name: Ball_G
   m_TagString: Untagged
@@ -87,3 +88,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4697055961526544641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 651867657518441280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e7e3ec46f593b45860bb235a7513ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: Green
+  position: {x: 0, y: 0}
