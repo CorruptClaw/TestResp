@@ -55,15 +55,6 @@ public class PlayerBall : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (!collision.gameObject.CompareTag("Ball") || !collision.gameObject.CompareTag("PlayerBall"))
-        {
-            //Debug.Log($"{gameObject.name} no longer colliding with {collision.gameObject.name}");
-            isOnBall = false;
-            isConnected = false;
-        }
-    }
 
     /*
     private void CheckAndHandleSupport()

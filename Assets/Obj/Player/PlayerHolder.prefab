@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532127505783991184}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 1.1160003, y: 0.0036355257, z: 0.035096504}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7098875736467316099}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!58 &1193358504220065814
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 5210234701965416995}
   - component: {fileID: 6374801136090613868}
   m_Layer: 0
-  m_Name: ThePlayerHolder
+  m_Name: PlayerHolder
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -201,8 +201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ea4de866a425445a38ec4a9e398673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRotationAngle: 0
-  rotationSpeed: 0
+  maxRotationAngle: 45
+  rotationSpeed: 50
   frontLineLenght: 2
 --- !u!114 &6374801136090613868
 MonoBehaviour:
@@ -217,13 +217,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3292202213604714843, guid: 26b0345b5d4b9b647a958951e5ee9d69, type: 3}
+  - {fileID: 651867657518441280, guid: a674f32a891243d479885ebebdf9741c, type: 3}
+  - {fileID: 434149569660970165, guid: 55ead1f5e2b98af48b92062ee9a45c72, type: 3}
+  - {fileID: 4258367328465120227, guid: 233af99d236ac474282a1c206526bcf3, type: 3}
+  - {fileID: 6734331768607518297, guid: 58341d6145ca8ee42a703ee353d09f5b, type: 3}
+  - {fileID: 6705771654161441238, guid: 554efd937ebffb24e9da6d1d7eb618de, type: 3}
   blueBallOnly: 1
-  BlueBall: {fileID: 0}
+  BlueBall: {fileID: 3292202213604714843, guid: 26b0345b5d4b9b647a958951e5ee9d69, type: 3}
   shootingForce: 500
-  shootingPoint: {fileID: 0}
+  shootingPoint: {fileID: 3635504269658864277}

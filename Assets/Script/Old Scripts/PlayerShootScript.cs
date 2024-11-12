@@ -16,7 +16,7 @@ public class PlayerShootScript : MonoBehaviour
 
     private PlayerInput playerInput;
     private GameObject previewBallInstance = null;
-    private BallMovementTest movementTest;
+    private PlayerBall playerBall;
 
 
     private void Awake()
@@ -33,7 +33,7 @@ public class PlayerShootScript : MonoBehaviour
     {
         GeneratePreviewBall();
 
-        movementTest = GetComponent<BallMovementTest>();
+        playerBall = GetComponent<PlayerBall>();
 
     }
 
@@ -60,7 +60,7 @@ public class PlayerShootScript : MonoBehaviour
             GeneratePreviewBall();
 
         }
-        movementTest.isShot = true;
+        playerBall.isShot = true;
     }
 
 
