@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 489870c4fc0afc941b57c8db6004d6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleCollider: {fileID: 0}
+  circleCollider: {fileID: 3810631116404478676}
   isGrounded: 0
   isOnBall: 0
   isConnected: 0

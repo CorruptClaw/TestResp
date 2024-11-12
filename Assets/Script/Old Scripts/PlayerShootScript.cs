@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.GraphicsBuffer;
 
 public class PlayerShootScript : MonoBehaviour
 {
@@ -15,34 +14,20 @@ public class PlayerShootScript : MonoBehaviour
 
     private PlayerInput playerInput;
     private GameObject previewBallInstance = null;
-    private BallBehavior ballBehavior;
     private PlayerBall playerBall;
 
-    
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-        if (playerInput == null)
-        {
-            Debug.LogError("PlayerInput component is missing on this GameObject.");
-            return;
-        }
 
-        var attackAction = playerInput.actions["Attack"];
-        if (attackAction != null)
-        {
-            attackAction.performed += ctx => onAttack();
-        }
-        else
-        {
-            Debug.LogError("Attack action not found in PlayerInput actions.");
-        }
+        playerInput.actions["Attack"].performed += ctx => onAttack();
+
     }
-    
+
     void Start()
     {
         GeneratePreviewBall();
-        ballBehavior = GetComponent<BallBehavior>();
+
     }
 
     void Update()
@@ -52,17 +37,16 @@ public class PlayerShootScript : MonoBehaviour
             previewBallInstance.transform.position = shootingPoint.position;
         }
     }
-    
+
     void onAttack()
     {
-        if (previewBallInstance != null && playerInput != null)
+        if (previewBallInstance != null)
         {
             ShootBall();
             GeneratePreviewBall();
-            playerBall.isShot = true;
         }
     }
-    
+
     void GeneratePreviewBall()
     {
         if (ballPrefabs.Count > 0)
@@ -75,6 +59,8 @@ public class PlayerShootScript : MonoBehaviour
             GameObject ballToShoot = blueBallOnly && BlueBall != null ? BlueBall : ballPrefabs[Random.Range(0, ballPrefabs.Count)];
             previewBallInstance = Instantiate(ballToShoot, shootingPoint.position, Quaternion.identity);
             previewBallInstance.tag = "PlayerBall";
+
+            Debug.Log("Preview ball generated.");
 
             BallBehavior ballBehavior = previewBallInstance.GetComponent<BallBehavior>();
             if (ballBehavior != null)
@@ -92,7 +78,7 @@ public class PlayerShootScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("No ball obj assigned to the list");
+            Debug.Log("No ball objects assigned to the list.");
         }
     }
 
@@ -106,9 +92,27 @@ public class PlayerShootScript : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
                 rb.angularVelocity = 0f;
                 rb.AddForce(shootingPoint.up * shootingForce);
-                
+                Debug.Log("Ball shot with force: " + shootingForce);
             }
+
+            
+            // Check if the preview ball has a PlayerBall component and mark it as shot
+            playerBall = previewBallInstance.GetComponent<PlayerBall>();
+            if (playerBall != null)
+            {
+                playerBall.isShot = true;
+                Debug.Log("PlayerBall isShot set to true.");
+            }
+            else
+            {
+                Debug.LogWarning("PlayerBall component missing on instantiated ball.");
+            }
+            
             previewBallInstance = null;
+        }
+        else
+        {
+            Debug.LogWarning("No preview ball to shoot.");
         }
     }
 }

@@ -36,7 +36,7 @@ public class PlayerBall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!isShot) return;
+        if (!isShot && !CompareTag("PlayerBall")) return;
 
         if (collision.gameObject.CompareTag("Ground"))
         {
