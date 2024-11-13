@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6872396193530437639}
   - component: {fileID: 9178893298246234822}
   - component: {fileID: 5356382116554858193}
-  - component: {fileID: 3390206386219314426}
   m_Layer: 0
   m_Name: Ball_G 1
   m_TagString: Ball
@@ -166,22 +165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 489870c4fc0afc941b57c8db6004d6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  ballColor: 
+  isPlayerBall: 0
   circleCollider: {fileID: 0}
   isGrounded: 0
   isOnBall: 0
   isConnected: 0
   isShot: 0
---- !u!114 &3390206386219314426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 651867657518441280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 059a155478460e64ca6df27b3b1900cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ballColor: Green
-  isPlayerBall: 0
