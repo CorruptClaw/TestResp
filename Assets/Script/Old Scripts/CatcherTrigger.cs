@@ -25,7 +25,12 @@ public class CatcherTrigger : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        
+        PlayerBall playerBall = other.GetComponent<PlayerBall>();
+        if (playerBall != null)
+        {
+            Destroy(other.gameObject);
+        }
+
     }
 
 

@@ -520,10 +520,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1768612964893911775, guid: c04f46900e5096f44903813702339bf6, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 5b4f8d6c4f74ec54a82742fdc9b3d62f, type: 2}
     - target: {fileID: 1850535165419943322, guid: c04f46900e5096f44903813702339bf6, type: 3}
       propertyPath: m_Name
       value: Box
       objectReference: {fileID: 0}
+    - target: {fileID: 2002906037940999035, guid: c04f46900e5096f44903813702339bf6, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 5b4f8d6c4f74ec54a82742fdc9b3d62f, type: 2}
     - target: {fileID: 6272790246256420722, guid: c04f46900e5096f44903813702339bf6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.72

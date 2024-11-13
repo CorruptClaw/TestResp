@@ -94,6 +94,8 @@ public class BallManager : MonoBehaviour
         // Find connected balls of the same color
         List<BallBehaviorTest> connectedBalls = FindConnectedBallsOfSameColor(playerBall);
 
+        PlayerBall playerBallScript = GameObject.FindAnyObjectByType<PlayerBall>();
+
         // Only proceed if there are 3 or more connected balls of the same color
         if (connectedBalls.Count >= 3)
         {
@@ -112,7 +114,16 @@ public class BallManager : MonoBehaviour
         {
             Debug.Log($"Group of {connectedBalls.Count} balls of color {playerBall.ballColor} is too small to trigger. No changes made.");
         }
-        
+
+        if (playerBallScript != null)
+        {
+            playerBallScript.MakePlayerBallFall();
+        }
+        else
+        {
+            Debug.LogWarning("PlayerBall not found in the scene.");
+        }
+
     }
 
     List<BallBehaviorTest> FindConnectedBallsOfSameColor(BallBehaviorTest ball)
