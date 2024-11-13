@@ -8,10 +8,13 @@ public class BallManager : MonoBehaviour
     public List<BallBehaviorTest> allBalls;
     private Dictionary<string, List<List<BallBehaviorTest>>> colorGroups = new Dictionary<string, List<List<BallBehaviorTest>>>();
 
+    private PlayerBall isOn;
+
     void Start()
     {
         allBalls = new List<BallBehaviorTest>(FindObjectsByType<BallBehaviorTest>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
         ballCount = allBalls.Count;
+        isOn = GameObject.FindAnyObjectByType<PlayerBall>();
 
         Debug.Log($"Total balls found: {ballCount}");
         // Initialize connected groups
@@ -105,11 +108,8 @@ public class BallManager : MonoBehaviour
             foreach (BallBehaviorTest ball in connectedBalls)
             {
                 ball.SetColliderTrigger(true); // Set collider to trigger to make it "fall"
-                
-                
+                //playerBall.SetColliderTrigger(true);
             }
-
-            
 
             // Set the player ball itself to trigger
             playerBall.SetColliderTrigger(true);
@@ -117,6 +117,14 @@ public class BallManager : MonoBehaviour
         else
         {
             Debug.Log($"Group of {connectedBalls.Count} balls of color {playerBall.ballColor} is too small to trigger. No changes made.");
+        }
+
+        if (connectedBalls.Count >= 3 && isOn.isOnBall)
+        {
+            foreach (BallBehaviorTest ball in connectedBalls)
+            {
+                playerBall.SetColliderTrigger(true);
+            }
         }
 
     }
