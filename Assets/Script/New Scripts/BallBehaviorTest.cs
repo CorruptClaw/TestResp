@@ -36,24 +36,48 @@ public class BallBehaviorTest : MonoBehaviour
 
     }
 
-
+    
     private void OnCollisionEnter2D(Collision2D otherCollision)
     {
         if (otherCollision.gameObject.CompareTag("PlayerBall"))
         {
-            SetColliderTrigger(otherCollision.gameObject);
+            BallManager ballManager = Object.FindFirstObjectByType<BallManager>();
+            if (ballManager != null)
+            {
+                ballManager.OnPlayerBallHit(this);
+                Debug.Log($"Player ball collided with ball at {position}. Triggering group response in BallManager.");
+            }
+            else
+            {
+                Debug.LogWarning("BallManager not found. Unable to trigger group response.");
+            }
         }
 
     }
+    
 
     public void SetColliderTrigger(bool isTrigger)
     {
+        Collider2D ballCollider = GetComponent<Collider2D>();
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
         if (ballCollider != null)
         {
             ballCollider.isTrigger = isTrigger;
-            rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.gravityScale = 1f;
-            rb.constraints = RigidbodyConstraints2D.None;
+
+            if (isTrigger && rb != null) // Only change Rigidbody properties if we’re setting it to trigger
+            {
+                rb.bodyType = RigidbodyType2D.Dynamic;
+                rb.gravityScale = 1f;
+                rb.constraints = RigidbodyConstraints2D.None;
+
+                Debug.Log($"Collider for Ball at {position} set to trigger, Rigidbody set to dynamic with gravity.");
+            }
+            
+        }
+        else
+        {
+            Debug.LogWarning($"No collider found for Ball at {position}");
         }
     }
 

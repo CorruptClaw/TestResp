@@ -28,6 +28,8 @@ public class PlayerShootScript : MonoBehaviour
     {
         GeneratePreviewBall();
 
+        playerBall = previewBallInstance.GetComponent<PlayerBall>();
+
     }
 
     void Update()
@@ -45,6 +47,7 @@ public class PlayerShootScript : MonoBehaviour
             ShootBall();
             GeneratePreviewBall();
         }
+        
     }
 
     void GeneratePreviewBall()
@@ -60,7 +63,7 @@ public class PlayerShootScript : MonoBehaviour
             previewBallInstance = Instantiate(ballToShoot, shootingPoint.position, Quaternion.identity);
             previewBallInstance.tag = "PlayerBall";
 
-            Debug.Log("Preview ball generated.");
+            //Debug.Log("Preview ball generated.");
 
             BallBehavior ballBehavior = previewBallInstance.GetComponent<BallBehavior>();
             if (ballBehavior != null)
@@ -87,27 +90,20 @@ public class PlayerShootScript : MonoBehaviour
         if (previewBallInstance != null)
         {
             Rigidbody2D rb = previewBallInstance.GetComponent<Rigidbody2D>();
+            PlayerBall playerBall2 = previewBallInstance.GetComponent<PlayerBall>();
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
                 rb.angularVelocity = 0f;
                 rb.AddForce(shootingPoint.up * shootingForce);
-                Debug.Log("Ball shot with force: " + shootingForce);
+                playerBall2.GetComponent<CircleCollider2D>().enabled = true;
+                //Debug.Log("Ball shot with force: " + shootingForce);
+                if (shootingForce > 0f)
+                {
+                    playerBall2.isShot = true;
+                }
             }
 
-            
-            // Check if the preview ball has a PlayerBall component and mark it as shot
-            playerBall = previewBallInstance.GetComponent<PlayerBall>();
-            if (playerBall != null)
-            {
-                playerBall.isShot = true;
-                Debug.Log("PlayerBall isShot set to true.");
-            }
-            else
-            {
-                Debug.LogWarning("PlayerBall component missing on instantiated ball.");
-            }
-            
             previewBallInstance = null;
         }
         else

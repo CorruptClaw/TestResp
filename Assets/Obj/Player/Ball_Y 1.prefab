@@ -98,7 +98,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6705771654161441238}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 6200000, guid: b5f44656abb08304a84ca5fa0c175f74, type: 2}
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 489870c4fc0afc941b57c8db6004d6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleCollider: {fileID: 5711587378760479950}
+  circleCollider: {fileID: 0}
   isGrounded: 0
   isOnBall: 0
   isConnected: 0

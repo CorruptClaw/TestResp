@@ -165,6 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6e7e3ec46f593b45860bb235a7513ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballColor: 
+  ballColor: Red
   position: {x: 0, y: 0}
   kinematicOn: 0

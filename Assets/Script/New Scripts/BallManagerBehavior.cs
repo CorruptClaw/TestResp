@@ -5,7 +5,7 @@ using UnityEngine;
 public class BallManager : MonoBehaviour
 {
     [SerializeField] private int ballCount;
-    private List<BallBehaviorTest> allBalls;
+    public List<BallBehaviorTest> allBalls;
     private Dictionary<string, List<List<BallBehaviorTest>>> colorGroups = new Dictionary<string, List<List<BallBehaviorTest>>>();
 
     void Start()
@@ -13,6 +13,7 @@ public class BallManager : MonoBehaviour
         allBalls = new List<BallBehaviorTest>(FindObjectsByType<BallBehaviorTest>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
         ballCount = allBalls.Count;
 
+        Debug.Log($"Total balls found: {ballCount}");
         // Initialize connected groups
         FindAllConnectedBalls();
     }
@@ -33,6 +34,7 @@ public class BallManager : MonoBehaviour
                     colorGroups[ball.ballColor] = new List<List<BallBehaviorTest>>();
                 }
                 colorGroups[ball.ballColor].Add(connectedBalls);
+                Debug.Log($"New group found for color {ball.ballColor} with {connectedBalls.Count} balls.");
             }
         }
 
@@ -52,11 +54,14 @@ public class BallManager : MonoBehaviour
             visited.Add(current);
             connectedBalls.Add(current);
 
+            Debug.Log($"Added Ball at {current.position} to connected group (color {current.ballColor})");
+
             foreach (BallBehaviorTest neighbor in GetNeighbors(current))
             {
                 if (!visited.Contains(neighbor) && neighbor.ballColor == current.ballColor)
                 {
                     stack.Push(neighbor);
+                    Debug.Log($"Neighbor at {neighbor.position} with color {neighbor.ballColor} is connected to {current.position}");
                 }
             }
         }
@@ -72,7 +77,11 @@ public class BallManager : MonoBehaviour
             Vector2Int neighborPosition = ball.position + direction;
             BallBehaviorTest neighbor = allBalls.Find(b => b.position == neighborPosition);
             if (neighbor != null)
+            {
                 neighbors.Add(neighbor);
+                Debug.Log($"Neighbor found at {neighborPosition} for ball at {ball.position}");
+            }
+
         }
 
         return neighbors;
@@ -80,30 +89,45 @@ public class BallManager : MonoBehaviour
 
     public void OnPlayerBallHit(BallBehaviorTest playerBall)
     {
+        Debug.Log($"Player ball hit detected at {playerBall.position} with color {playerBall.ballColor}");
+
         // Find connected balls of the same color
         List<BallBehaviorTest> connectedBalls = FindConnectedBallsOfSameColor(playerBall);
 
-        // Set all connected balls and the player ball's colliders to triggers
-        foreach (BallBehaviorTest ball in connectedBalls)
+        // Only proceed if there are 3 or more connected balls of the same color
+        if (connectedBalls.Count >= 3)
         {
-            ball.SetColliderTrigger(true);
-        }
+            Debug.Log($"Group of {connectedBalls.Count} balls of color {playerBall.ballColor} meets the threshold. Changing colliders to triggers.");
 
-        // Set any neighboring balls of different colors to also be triggers
-        foreach (BallBehaviorTest ball in connectedBalls)
+            // Set all connected balls and the player ball's colliders to triggers
+            foreach (BallBehaviorTest ball in connectedBalls)
+            {
+                ball.SetColliderTrigger(true); // Set collider to trigger to make it "fall"
+            }
+
+            // Set the player ball itself to trigger
+            playerBall.SetColliderTrigger(true);
+        }
+        else
         {
-            SetAdjacentNonMatchingBallsToTrigger(ball);
+            Debug.Log($"Group of {connectedBalls.Count} balls of color {playerBall.ballColor} is too small to trigger. No changes made.");
         }
-
-        // Set the player ball itself to trigger
-        playerBall.SetColliderTrigger(true);
+        
     }
 
     List<BallBehaviorTest> FindConnectedBallsOfSameColor(BallBehaviorTest ball)
     {
         List<BallBehaviorTest> connectedBalls = new List<BallBehaviorTest>();
         HashSet<BallBehaviorTest> visited = new HashSet<BallBehaviorTest>();
+
         FindConnectedBalls(ball, connectedBalls, visited);
+        Debug.Log($"Total connected balls found for color {ball.ballColor}: {connectedBalls.Count}");
+
+        foreach (var connectedBall in connectedBalls)
+        {
+            Debug.Log($"Connected Ball at {connectedBall.position} with color {connectedBall.ballColor}");
+        }
+
         return connectedBalls;
     }
 
@@ -114,6 +138,7 @@ public class BallManager : MonoBehaviour
             if (neighbor.ballColor != ball.ballColor)
             {
                 neighbor.SetColliderTrigger(true);
+                Debug.Log($"Setting collider of neighboring ball at {neighbor.position} to trigger (color {neighbor.ballColor})");
             }
         }
     }
