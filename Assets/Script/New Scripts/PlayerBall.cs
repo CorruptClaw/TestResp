@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PlayerBall : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
+    public string ballColor;
+    public bool isPlayerBall;
     public CircleCollider2D circleCollider;
     //private float stopThreshold = 0.2f;
     //public LayerMask groundLayer;
@@ -53,6 +55,15 @@ public class PlayerBall : MonoBehaviour
             //Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
             //isConnected = true;
         }
+    }
+
+    public void MakePlayerBallFall()
+    {
+        circleCollider.isTrigger = true;
+        rb.bodyType = RigidbodyType2D.Dynamic;  // Change to dynamic so it can move and fall
+        rb.gravityScale = 1f;                   // Apply gravity
+        rb.constraints = RigidbodyConstraints2D.None; // Remove constraints
+        Debug.Log("Player ball set to fall (Collider is trigger, Rigidbody unfreezed).");
     }
 
 }

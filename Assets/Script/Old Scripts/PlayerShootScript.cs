@@ -65,7 +65,7 @@ public class PlayerShootScript : MonoBehaviour
 
             //Debug.Log("Preview ball generated.");
 
-            BallBehavior ballBehavior = previewBallInstance.GetComponent<BallBehavior>();
+            PlayerBall ballBehavior = previewBallInstance.GetComponent<PlayerBall>();
             if (ballBehavior != null)
             {
                 ballBehavior.isPlayerBall = true;

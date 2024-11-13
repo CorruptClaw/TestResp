@@ -111,6 +111,26 @@ public class BallBehavior : MonoBehaviour
                 //Debug.Log($"Unfreezing ball: {ball.name}");
             }
         }
+
+        if (isPlayerBall)
+        {
+            Rigidbody2D playerRb = GetComponent<Rigidbody2D>();
+            if (playerRb != null)
+            {
+                playerRb.bodyType = RigidbodyType2D.Dynamic;
+                playerRb.gravityScale = 1f;
+                playerRb.constraints = RigidbodyConstraints2D.None; // Remove freeze constraints
+
+                // Optionally: Set the player ball's collider to a trigger
+                CircleCollider2D circleCollider = GetComponent<CircleCollider2D>();
+                if (circleCollider != null)
+                {
+                    circleCollider.isTrigger = true;
+                }
+
+                Debug.Log("Unfreezing player ball and setting collider to trigger.");
+            }
+        }
     }
 
     private IEnumerator MakePlayerBallTriggerWithDelay(CircleCollider2D playerCollider) // Coroutine that waits one physics update (fixed update) before setting the player ball's collider as a trigger.

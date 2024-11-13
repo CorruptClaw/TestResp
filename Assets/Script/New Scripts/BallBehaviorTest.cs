@@ -12,6 +12,7 @@ public class BallBehaviorTest : MonoBehaviour
     public bool kinematicOn;
 
 
+
     public void Initialize(string color, Vector2Int position)
     {
         this.ballColor = color;
@@ -29,6 +30,7 @@ public class BallBehaviorTest : MonoBehaviour
             position = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
+
     }
 
     void Update()
@@ -46,6 +48,7 @@ public class BallBehaviorTest : MonoBehaviour
             {
                 ballManager.OnPlayerBallHit(this);
                 Debug.Log($"Player ball collided with ball at {position}. Triggering group response in BallManager.");
+                
             }
             else
             {
@@ -73,7 +76,7 @@ public class BallBehaviorTest : MonoBehaviour
 
                 Debug.Log($"Collider for Ball at {position} set to trigger, Rigidbody set to dynamic with gravity.");
             }
-            
+
         }
         else
         {
