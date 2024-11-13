@@ -111,5 +111,9 @@ public class PlayerShootScript : MonoBehaviour
             Debug.LogWarning("No preview ball to shoot.");
         }
     }
+
+    // Method to reset the player's ball to its default state
+    
+
 }
 

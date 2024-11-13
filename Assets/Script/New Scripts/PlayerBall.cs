@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBall : MonoBehaviour
 {
-    public Rigidbody2D rb;
+    private Rigidbody2D rb;
     public string ballColor;
     public bool isPlayerBall;
     public CircleCollider2D circleCollider;

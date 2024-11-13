@@ -18,6 +18,7 @@ public class BallManager : MonoBehaviour
         FindAllConnectedBalls();
     }
 
+    #region Check and find balls(with same color) on the level and connect them
     void FindAllConnectedBalls()
     {
         HashSet<BallBehaviorTest> visited = new HashSet<BallBehaviorTest>();
@@ -86,15 +87,14 @@ public class BallManager : MonoBehaviour
 
         return neighbors;
     }
-
+#endregion
+    #region How the player ball and the ball that is connected behaves
     public void OnPlayerBallHit(BallBehaviorTest playerBall)
     {
         //Debug.Log($"Player ball hit detected at {playerBall.position} with color {playerBall.ballColor}");
 
         // Find connected balls of the same color
         List<BallBehaviorTest> connectedBalls = FindConnectedBallsOfSameColor(playerBall);
-
-        PlayerBall playerBallScript = GameObject.FindAnyObjectByType<PlayerBall>();
 
         // Only proceed if there are 3 or more connected balls of the same color
         if (connectedBalls.Count >= 3)
@@ -105,7 +105,11 @@ public class BallManager : MonoBehaviour
             foreach (BallBehaviorTest ball in connectedBalls)
             {
                 ball.SetColliderTrigger(true); // Set collider to trigger to make it "fall"
+                
+                
             }
+
+            
 
             // Set the player ball itself to trigger
             playerBall.SetColliderTrigger(true);
@@ -113,15 +117,6 @@ public class BallManager : MonoBehaviour
         else
         {
             Debug.Log($"Group of {connectedBalls.Count} balls of color {playerBall.ballColor} is too small to trigger. No changes made.");
-        }
-
-        if (playerBallScript != null)
-        {
-            playerBallScript.MakePlayerBallFall();
-        }
-        else
-        {
-            Debug.LogWarning("PlayerBall not found in the scene.");
         }
 
     }
@@ -153,7 +148,7 @@ public class BallManager : MonoBehaviour
             }
         }
     }
-
+#endregion
     void PrintGroups()
     {
         foreach (var colorGroup in colorGroups)

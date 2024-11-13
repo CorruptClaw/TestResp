@@ -49,6 +49,16 @@ public class BallBehaviorTest : MonoBehaviour
                 ballManager.OnPlayerBallHit(this);
                 Debug.Log($"Player ball collided with ball at {position}. Triggering group response in BallManager.");
                 
+                PlayerBall playerBallScript = GameObject.FindAnyObjectByType<PlayerBall>();
+                if (playerBallScript != null)
+                {
+                    playerBallScript.MakePlayerBallFall();
+                }
+                else
+                {
+                    Debug.LogWarning("PlayerBall not found in the scene.");
+                }
+
             }
             else
             {
