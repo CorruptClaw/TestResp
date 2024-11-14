@@ -20,8 +20,7 @@ public class PlayerBall : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         circleCollider = GetComponent<CircleCollider2D>();
-        float rotationDir = Random.Range(-1f, 1f);
-        rb.AddTorque(rotationDir * 10);
+        rb.AddTorque(Random.Range(-1f, 1f) * 10);
 
     }
 

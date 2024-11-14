@@ -44,21 +44,14 @@ public class BallBehaviorTest : MonoBehaviour
         if (otherCollision.gameObject.CompareTag("PlayerBall"))
         {
             BallManager ballManager = Object.FindFirstObjectByType<BallManager>();
-            if (ballManager != null)
+            PlayerBall playerBallScript = otherCollision.gameObject.GetComponent<PlayerBall>();
+
+            if (ballManager != null && playerBallScript != null && playerBallScript.ballColor == ballColor)
             {
                 ballManager.OnPlayerBallHit(this);
                 Debug.Log($"Player ball collided with ball at {position}. Triggering group response in BallManager.");
-                /*
-                PlayerBall playerBallScript = GameObject.FindAnyObjectByType<PlayerBall>();
-                if (playerBallScript != null)
-                {
-                    playerBallScript.MakePlayerBallFall();
-                }
-                else
-                {
-                    Debug.LogWarning("PlayerBall not found in the scene.");
-                }
-                */
+
+                playerBallScript.MakePlayerBallFall();
             }
             else
             {
@@ -71,13 +64,8 @@ public class BallBehaviorTest : MonoBehaviour
 
     public void SetColliderTrigger(bool isTrigger)
     {
-        PlayerBall playerBallScript = GameObject.FindAnyObjectByType<PlayerBall>();
-
         Collider2D ballCollider = GetComponent<Collider2D>();
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
-        Collider2D playerCollider = playerBallScript.GetComponent<Collider2D>();
-        Rigidbody2D playerRB = playerBallScript.GetComponent<Rigidbody2D>();
 
         if (ballCollider != null)
         {
@@ -92,26 +80,6 @@ public class BallBehaviorTest : MonoBehaviour
                 Debug.Log($"Collider for Ball at {position} set to trigger, Rigidbody set to dynamic with gravity.");
             }
 
-
-        }
-        else
-        {
-            Debug.LogWarning($"No collider found for Ball at {position}");
-        }
-
-        if (playerCollider != null)
-        {
-            playerCollider.isTrigger = isTrigger;
-            if (isTrigger && playerRB != null)
-            {
-                playerRB.bodyType = RigidbodyType2D.Dynamic;
-                playerRB.gravityScale = 1f;
-                playerRB.constraints = RigidbodyConstraints2D.None;
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"No collider found for PlayerBall at {position}");
         }
 
     }

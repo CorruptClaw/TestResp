@@ -8,13 +8,10 @@ public class BallManager : MonoBehaviour
     public List<BallBehaviorTest> allBalls;
     private Dictionary<string, List<List<BallBehaviorTest>>> colorGroups = new Dictionary<string, List<List<BallBehaviorTest>>>();
 
-    private PlayerBall isOn;
-
     void Start()
     {
         allBalls = new List<BallBehaviorTest>(FindObjectsByType<BallBehaviorTest>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
         ballCount = allBalls.Count;
-        isOn = GameObject.FindAnyObjectByType<PlayerBall>();
 
         Debug.Log($"Total balls found: {ballCount}");
         // Initialize connected groups
@@ -119,14 +116,6 @@ public class BallManager : MonoBehaviour
             Debug.Log($"Group of {connectedBalls.Count} balls of color {playerBall.ballColor} is too small to trigger. No changes made.");
         }
 
-        if (connectedBalls.Count >= 3 && isOn.isOnBall)
-        {
-            foreach (BallBehaviorTest ball in connectedBalls)
-            {
-                playerBall.SetColliderTrigger(true);
-            }
-        }
-
     }
 
     List<BallBehaviorTest> FindConnectedBallsOfSameColor(BallBehaviorTest ball)
@@ -137,25 +126,9 @@ public class BallManager : MonoBehaviour
         FindConnectedBalls(ball, connectedBalls, visited);
         //Debug.Log($"Total connected balls found for color {ball.ballColor}: {connectedBalls.Count}");
 
-        foreach (var connectedBall in connectedBalls)
-        {
-            Debug.Log($"Connected Ball at {connectedBall.position} with color {connectedBall.ballColor}");
-        }
-
         return connectedBalls;
     }
 
-    void SetAdjacentNonMatchingBallsToTrigger(BallBehaviorTest ball)
-    {
-        foreach (BallBehaviorTest neighbor in GetNeighbors(ball))
-        {
-            if (neighbor.ballColor != ball.ballColor)
-            {
-                neighbor.SetColliderTrigger(true);
-                //Debug.Log($"Setting collider of neighboring ball at {neighbor.position} to trigger (color {neighbor.ballColor})");
-            }
-        }
-    }
 #endregion
     void PrintGroups()
     {
