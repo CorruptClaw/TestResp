@@ -107,9 +107,12 @@ public class PlayerBall : MonoBehaviour
     public void MakePlayerBallFall()
     {
         circleCollider.isTrigger = true;
-        rb.bodyType = RigidbodyType2D.Dynamic;  // Change to dynamic so it can move and fall
-        rb.gravityScale = 1f;                   // Apply gravity
-        rb.constraints = RigidbodyConstraints2D.None; // Remove constraints
+        if (circleCollider.isTrigger)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;  // Change to dynamic so it can move and fall
+            rb.gravityScale = 1f;                   // Apply gravity
+            rb.constraints = RigidbodyConstraints2D.None; // Remove constraints
+        }
         Debug.Log("Player ball set to fall (Collider is trigger, Rigidbody unfreezed).");
     }
 
