@@ -41,7 +41,7 @@ public class BallBehaviorTest : MonoBehaviour
     
     private void OnCollisionEnter2D(Collision2D otherCollision)
     {
-        if (otherCollision.gameObject.CompareTag("PlayerBall"))
+        if (otherCollision.gameObject.CompareTag("Ball"))
         {
             BallManager ballManager = Object.FindFirstObjectByType<BallManager>();
             PlayerBall playerBallScript = otherCollision.gameObject.GetComponent<PlayerBall>();

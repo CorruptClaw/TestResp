@@ -38,7 +38,7 @@ public class BallManager : MonoBehaviour
                 Debug.Log($"New group found for color {ball.ballColor} with {connectedBalls.Count} balls.");
             }
         }
-        //PrintGroups();
+        PrintGroups();
     }
 
     void FindConnectedBalls(BallBehaviorTest ball, List<BallBehaviorTest> connectedBalls, HashSet<BallBehaviorTest> visited)
@@ -122,7 +122,7 @@ public class BallManager : MonoBehaviour
         return connectedBalls;
     }
     #endregion
-    /*void PrintGroups()
+    void PrintGroups()
     {
         foreach (var colorGroup in colorGroups)
         {
@@ -137,5 +137,5 @@ public class BallManager : MonoBehaviour
                 Debug.Log($"Connected Group: {groupBalls}");
             }
         }
-    }*/
+    }
 }

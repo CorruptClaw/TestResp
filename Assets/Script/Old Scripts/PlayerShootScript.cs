@@ -61,7 +61,7 @@ public class PlayerShootScript : MonoBehaviour
 
             GameObject ballToShoot = blueBallOnly && BlueBall != null ? BlueBall : ballPrefabs[Random.Range(0, ballPrefabs.Count)];
             previewBallInstance = Instantiate(ballToShoot, shootingPoint.position, Quaternion.identity);
-            previewBallInstance.tag = "PlayerBall";
+            //previewBallInstance.tag = "PlayerBall";
 
             //Debug.Log("Preview ball generated.");
 
