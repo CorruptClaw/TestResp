@@ -40,7 +40,7 @@ public class PlayerBall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (!isShot) return;
+        if (!isShot) return;
 
         if (collision.gameObject.CompareTag("Ground"))
         {
@@ -58,7 +58,7 @@ public class PlayerBall : MonoBehaviour
             //isConnected = true;
         }
 
-        if (!isShot) return;
+        //if (!isShot) return;
 
         // Check if the collision is with another player ball of the same color
         PlayerBall otherPlayerBall = collision.gameObject.GetComponent<PlayerBall>();
