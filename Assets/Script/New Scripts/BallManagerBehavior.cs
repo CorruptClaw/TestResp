@@ -87,7 +87,7 @@ public class BallManager : MonoBehaviour
 
         return neighbors;
     }
-#endregion
+    #endregion
     #region How the player ball and the ball that is connected behaves
     public void OnPlayerBallHit(BallBehaviorTest playerBall)
     {
@@ -110,10 +110,6 @@ public class BallManager : MonoBehaviour
 
             // Set the player ball itself to trigger
             playerBall.SetColliderTrigger(true);
-        }
-        else
-        {
-            Debug.Log($"Group of {connectedBalls.Count} balls of color {playerBall.ballColor} is too small to trigger. No changes made.");
         }
 
     }

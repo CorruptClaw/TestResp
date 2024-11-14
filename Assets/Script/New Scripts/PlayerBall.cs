@@ -16,6 +16,9 @@ public class PlayerBall : MonoBehaviour
     public bool isConnected = false;
     public bool isShot = false;
 
+    // A static dictionary to keep track of connected player balls by color
+    private static Dictionary<string, List<PlayerBall>> colorGroups = new Dictionary<string, List<PlayerBall>>();
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -37,7 +40,7 @@ public class PlayerBall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!isShot) return;
+        //if (!isShot) return;
 
         if (collision.gameObject.CompareTag("Ground"))
         {
@@ -54,6 +57,51 @@ public class PlayerBall : MonoBehaviour
             //Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
             //isConnected = true;
         }
+
+        if (!isShot) return;
+
+        // Check if the collision is with another player ball of the same color
+        PlayerBall otherPlayerBall = collision.gameObject.GetComponent<PlayerBall>();
+        if (otherPlayerBall != null && otherPlayerBall.ballColor == ballColor)
+        {
+            // Add both this ball and the other ball to the color group
+            RegisterInColorGroup();
+
+            // Check if there are 3 or more balls in the group now
+            if (colorGroups[ballColor].Count >= 3)
+            {
+                TriggerFallForGroup(ballColor);
+            }
+        }
+    }
+
+    // Register this ball in the color group
+    private void RegisterInColorGroup()
+    {
+        if (!colorGroups.ContainsKey(ballColor))
+        {
+            colorGroups[ballColor] = new List<PlayerBall>();
+        }
+
+        // Only add if it’s not already in the group
+        if (!colorGroups[ballColor].Contains(this))
+        {
+            colorGroups[ballColor].Add(this);
+        }
+    }
+
+    // Make all player balls in this color group fall
+    private static void TriggerFallForGroup(string color)
+    {
+        if (!colorGroups.ContainsKey(color)) return;
+
+        foreach (PlayerBall ball in colorGroups[color])
+        {
+            ball.MakePlayerBallFall();
+        }
+
+        // Clear the group after triggering fall
+        colorGroups[color].Clear();
     }
 
     public void MakePlayerBallFall()
@@ -64,5 +112,16 @@ public class PlayerBall : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.None; // Remove constraints
         Debug.Log("Player ball set to fall (Collider is trigger, Rigidbody unfreezed).");
     }
+
+    private void OnDestroy()
+    {
+        // Ensure this ball is removed from the group upon destruction
+        if (colorGroups.ContainsKey(ballColor))
+        {
+            colorGroups[ballColor].Remove(this);
+        }
+    }
+
+
 
 }

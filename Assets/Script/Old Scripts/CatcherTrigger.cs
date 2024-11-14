@@ -19,17 +19,18 @@ public class CatcherTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out BallBehaviorTest ball))
+        BallBehaviorTest ball = other.GetComponent<BallBehaviorTest>();
+        if (ball != null)
         {
             Destroy(other.gameObject);
         }
-        else if (other.TryGetComponent(out PlayerBall playerBall))
+
+        PlayerBall playerBall = other.GetComponent<PlayerBall>();
+        if (playerBall != null)
         {
             ResetPlayerBall(playerBall);
-
             Destroy(other.gameObject);
         }
-
     }
 
     void ResetPlayerBall(PlayerBall playerBall)
