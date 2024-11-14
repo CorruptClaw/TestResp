@@ -81,6 +81,10 @@ public class BallBehaviorTest : MonoBehaviour
             }
 
         }
+        else
+        {
+            Debug.LogWarning($"No collider found for Ball at {position}");
+        }
 
     }
 
