@@ -5,11 +5,13 @@ using UnityEngine;
 public class BallBehaviorTest : MonoBehaviour
 {
     private Rigidbody2D rb;
+    //public int points; // Points awarded for destroying this bubble
     public string ballColor;
     public Vector2Int position; // Position in the grid (e.g., (0, 1))
     private Collider2D ballCollider;
 
     public bool kinematicOn;
+    public bool isFalling; // Indicates if this ball is falling as part of a chain reaction
 
 
 
@@ -18,7 +20,6 @@ public class BallBehaviorTest : MonoBehaviour
         this.ballColor = color;
         this.position = position;
     }
-
 
 
     void Start()
@@ -33,12 +34,44 @@ public class BallBehaviorTest : MonoBehaviour
 
     }
 
-    void Update()
+    /*public void TriggerFall()
     {
+        isFalling = true;
+        ballCollider.isTrigger = true;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.gravityScale = 1.0f;
+        rb.constraints = RigidbodyConstraints2D.None;
+        OnFall();
+        Debug.Log($"Ball at {position} is falling due to chain reaction.");
+    }*/
+
+
+    private void OnFall()
+    {
+        // Add points to the score when the bubble is destroyed
+        /*if (ScoreManager2.instance != null && isFalling)
+        {
+            ScoreManager2.instance.Addscore(points);
+        }*/
+        if (ScoreManager.instance != null && isFalling)
+        {
+            ScoreManager.instance.AddPoint();
+        }
 
     }
 
-    
+    /*private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Example of bubble destruction logic (adjust as needed)
+        if (collision.gameObject.CompareTag("PlayerBall"))
+        {
+            OnDestroy();
+            Destroy(gameObject);
+        }
+
+    }*/
+
+
     private void OnCollisionEnter2D(Collision2D otherCollision)
     {
         if (otherCollision.gameObject.CompareTag("Ball"))
@@ -60,7 +93,7 @@ public class BallBehaviorTest : MonoBehaviour
         }
 
     }
-    
+
 
     public void SetColliderTrigger(bool isTrigger)
     {
@@ -73,9 +106,12 @@ public class BallBehaviorTest : MonoBehaviour
 
             if (isTrigger && rb != null) // Only change Rigidbody properties if we’re setting it to trigger
             {
+                isFalling = true;
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.gravityScale = 1f;
                 rb.constraints = RigidbodyConstraints2D.None;
+
+                OnFall();
 
                 Debug.Log($"Collider for Ball at {position} set to trigger, Rigidbody set to dynamic with gravity.");
             }

@@ -17,7 +17,7 @@ public class PlayerBall : MonoBehaviour
     public bool isShot = false;
 
     // A static dictionary to keep track of connected player balls by color
-    private static Dictionary<string, List<PlayerBall>> colorGroups = new Dictionary<string, List<PlayerBall>>();
+    //private static Dictionary<string, List<PlayerBall>> colorGroups = new Dictionary<string, List<PlayerBall>>();
 
     void Start()
     {
@@ -25,17 +25,6 @@ public class PlayerBall : MonoBehaviour
         circleCollider = GetComponent<CircleCollider2D>();
         rb.AddTorque(Random.Range(-1f, 1f) * 10);
 
-    }
-
-    void Update()
-    {
-        /*
-        // Periodically check for support
-        if (!isGrounded || !isOnBall)
-        {
-            CheckAndHandleSupport();
-        }
-        */
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -49,19 +38,22 @@ public class PlayerBall : MonoBehaviour
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             //Debug.Log($"{gameObject.name} grounded on {collision.gameObject.name}");
         }
-        else if (collision.gameObject.CompareTag("Ball") || collision.gameObject.CompareTag("PlayerBall"))
+        else if (collision.gameObject.CompareTag("Ball") /*|| collision.gameObject.CompareTag("PlayerBall")*/)
         {
             isConnected = true;
             isOnBall = true;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             //Debug.Log($"{gameObject.name} stopped after colliding with {collision.gameObject.name}");
             //isConnected = true;
+
+            //ScoreManager.instance.AddPoint();
+
         }
 
         //if (!isShot) return;
 
         // Check if the collision is with another player ball of the same color
-        PlayerBall otherPlayerBall = collision.gameObject.GetComponent<PlayerBall>();
+       /* PlayerBall otherPlayerBall = collision.gameObject.GetComponent<PlayerBall>();
         if (otherPlayerBall != null && otherPlayerBall.ballColor == ballColor)
         {
             // Add both this ball and the other ball to the color group
@@ -72,11 +64,11 @@ public class PlayerBall : MonoBehaviour
             {
                 TriggerFallForGroup(ballColor);
             }
-        }
+        }*/
     }
 
     // Register this ball in the color group
-    private void RegisterInColorGroup()
+    /*private void RegisterInColorGroup()
     {
         if (!colorGroups.ContainsKey(ballColor))
         {
@@ -102,7 +94,7 @@ public class PlayerBall : MonoBehaviour
 
         // Clear the group after triggering fall
         colorGroups[color].Clear();
-    }
+    }*/
 
     public void MakePlayerBallFall()
     {
@@ -116,14 +108,14 @@ public class PlayerBall : MonoBehaviour
         Debug.Log("Player ball set to fall (Collider is trigger, Rigidbody unfreezed).");
     }
 
-    private void OnDestroy()
+    /*private void OnDestroy()
     {
         // Ensure this ball is removed from the group upon destruction
         if (colorGroups.ContainsKey(ballColor))
         {
             colorGroups[ballColor].Remove(this);
         }
-    }
+    }*/
 
 
 
